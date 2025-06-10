@@ -1,0 +1,109 @@
+@import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --matrix-green: #00ff00;
+  --matrix-dark: #0d1117;
+  --matrix-card: #161b22;
+  --matrix-border: #21262d;
+  --matrix-accent: #ff1744;
+}
+
+* {
+  font-family: 'Courier Prime', 'Courier New', Courier, monospace;
+}
+
+body {
+  background-color: var(--matrix-dark);
+  color: var(--matrix-green);
+  overflow-x: hidden;
+}
+
+#matrix-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  opacity: 0.3;
+}
+
+.matrix-glow {
+  text-shadow: 0 0 10px var(--matrix-green), 0 0 20px var(--matrix-green), 0 0 40px var(--matrix-green);
+}
+
+.matrix-border {
+  border: 1px solid var(--matrix-green);
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.3), inset 0 0 10px rgba(0, 255, 0, 0.1);
+}
+
+.matrix-button {
+  background: rgba(0, 255, 0, 0.1);
+  border: 1px solid var(--matrix-green);
+  color: var(--matrix-green);
+  transition: all 0.3s ease;
+}
+
+.matrix-button:hover {
+  background: var(--matrix-green);
+  color: var(--matrix-dark);
+  box-shadow: 0 0 20px var(--matrix-green);
+  text-shadow: none;
+}
+
+.matrix-card {
+  background: rgba(22, 27, 34, 0.9);
+  border: 1px solid rgba(0, 255, 0, 0.3);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 1px rgba(0, 255, 0, 0.5);
+}
+
+.typing-animation::after {
+  content: '|';
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #00ff00, #00cc88);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hover-glow:hover {
+  box-shadow: 0 0 20px rgba(255, 23, 68, 0.6), 0 0 40px rgba(255, 23, 68, 0.3);
+  border-color: #ff1744;
+  color: #ff1744;
+}
+
+.scroll-glow::-webkit-scrollbar {
+  width: 8px;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.scroll-glow::-webkit-scrollbar-thumb {
+  background: var(--matrix-green);
+  border-radius: 4px;
+  box-shadow: 0 0 10px var(--matrix-green);
+}
+
+.pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes pulse-glow {
+  from {
+    box-shadow: 0 0 5px rgba(0, 255, 0, 0.4);
+  }
+  to {
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.8);
+  }
+}
