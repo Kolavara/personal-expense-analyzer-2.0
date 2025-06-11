@@ -79,25 +79,25 @@ const Analytics: React.FC = () => {
           </div>
         </div>
 
-        <div className="matrix-card p-6 rounded-lg hover-glow transition-all duration-300">
+        <div className="glass-card p-6 rounded-2xl hover-glow transition-all duration-300">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-green-400/70 text-sm mb-1">Largest Expense</p>
-              <p className="text-2xl font-bold matrix-glow">
+              <p className="text-cyan-300/70 text-sm mb-1">Largest Expense</p>
+              <p className="text-2xl font-bold text-cyan-400" style={{textShadow: '0 0 20px rgba(0, 255, 255, 0.6)'}}>
                 ${Math.max(...expenses.map(e => e.amount), 0).toFixed(2)}
               </p>
             </div>
-            <TrendingUp className="text-green-400 opacity-60" size={24} />
+            <TrendingUp className="text-cyan-400 opacity-60" size={24} />
           </div>
         </div>
 
-        <div className="matrix-card p-6 rounded-lg hover-glow transition-all duration-300">
+        <div className="glass-card p-6 rounded-2xl hover-glow transition-all duration-300">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-green-400/70 text-sm mb-1">Categories</p>
-              <p className="text-2xl font-bold matrix-glow">{Object.keys(categoryTotals).length}</p>
+              <p className="text-cyan-300/70 text-sm mb-1">Categories</p>
+              <p className="text-2xl font-bold text-cyan-400" style={{textShadow: '0 0 20px rgba(0, 255, 255, 0.6)'}}>{Object.keys(categoryTotals).length}</p>
             </div>
-            <PieChart className="text-green-400 opacity-60" size={24} />
+            <PieChart className="text-cyan-400 opacity-60" size={24} />
           </div>
         </div>
       </div>
@@ -105,8 +105,8 @@ const Analytics: React.FC = () => {
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
         {/* Monthly Trends */}
-        <div className="matrix-card p-6 rounded-lg">
-          <h3 className="text-xl font-semibold matrix-glow mb-6">Monthly Spending Trends</h3>
+        <div className="glass-card p-6 rounded-2xl">
+          <h3 className="text-xl font-semibold text-cyan-400 mb-6" style={{textShadow: '0 0 20px rgba(0, 255, 255, 0.6)'}}>Monthly Spending Trends</h3>
           <div className="space-y-4">
             {monthlyTrends.map(([month, amount], index) => {
               const maxAmount = Math.max(...monthlyTrends.map(([, amt]) => amt));
@@ -115,12 +115,12 @@ const Analytics: React.FC = () => {
               return (
                 <div key={month} className="space-y-2">
                   <div className="flex justify-between items-center">
-                    <span className="text-green-400 font-medium">{month}</span>
-                    <span className="matrix-glow font-bold">${amount.toFixed(2)}</span>
+                    <span className="text-cyan-400 font-medium">{month}</span>
+                    <span className="text-cyan-400 font-bold" style={{textShadow: '0 0 15px rgba(0, 255, 255, 0.5)'}}>${amount.toFixed(2)}</span>
                   </div>
-                  <div className="w-full bg-gray-700 rounded-full h-3">
+                  <div className="w-full bg-gray-700/50 rounded-full h-3">
                     <div 
-                      className="bg-green-400 h-3 rounded-full transition-all duration-1000 delay-${index * 100}"
+                      className="bg-gradient-to-r from-cyan-400 to-cyan-500 h-3 rounded-full transition-all duration-1000 delay-${index * 100} shadow-lg shadow-cyan-400/30"
                       style={{ width: `${percentage}%` }}
                     ></div>
                   </div>

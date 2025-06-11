@@ -157,20 +157,20 @@ const Debt: React.FC = () => {
           </div>
         </div>
 
-        <div className="matrix-card p-6 rounded-lg hover-glow transition-all duration-300">
+        <div className="glass-card p-6 rounded-2xl hover-glow transition-all duration-300">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-green-400/70 text-sm mb-1">Monthly Payments</p>
-              <p className="text-2xl font-bold matrix-glow">${totalMonthlyPayments.toFixed(2)}</p>
+              <p className="text-cyan-300/70 text-sm mb-1">Monthly Payments</p>
+              <p className="text-2xl font-bold text-cyan-400" style={{textShadow: '0 0 20px rgba(0, 255, 255, 0.6)'}}>${totalMonthlyPayments.toFixed(2)}</p>
             </div>
-            <Calendar className="text-green-400 opacity-60" size={24} />
+            <Calendar className="text-cyan-400 opacity-60" size={24} />
           </div>
         </div>
 
-        <div className="matrix-card p-6 rounded-lg hover-glow transition-all duration-300">
+        <div className="glass-card p-6 rounded-2xl hover-glow transition-all duration-300">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-green-400/70 text-sm mb-1">Avg Interest Rate</p>
+              <p className="text-cyan-300/70 text-sm mb-1">Avg Interest Rate</p>
               <p className="text-2xl font-bold text-yellow-400">{averageInterestRate.toFixed(1)}%</p>
             </div>
             <Calculator className="text-yellow-400 opacity-60" size={24} />

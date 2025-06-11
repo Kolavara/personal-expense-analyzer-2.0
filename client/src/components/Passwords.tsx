@@ -198,7 +198,7 @@ const Passwords: React.FC = () => {
               <p className="text-cyan-300/70 text-sm mb-1">Total Accounts</p>
               <p className="text-2xl font-bold text-cyan-400" style={{textShadow: '0 0 20px rgba(0, 255, 255, 0.6)'}}>{credentials.length}</p>
             </div>
-            <Shield className="text-emerald-400 opacity-60" size={24} />
+            <Shield className="text-cyan-400 opacity-60" size={24} />
           </div>
         </div>
 
