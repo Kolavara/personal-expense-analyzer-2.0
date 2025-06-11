@@ -62,12 +62,12 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView }) => {
       </nav>
       
       <div className="absolute bottom-6 left-6 right-6">
-        <div className="igloo-card p-4 rounded-xl text-center border border-emerald-400/20">
-          <div className="w-8 h-8 mx-auto mb-2 rounded-full bg-emerald-400/20 flex items-center justify-center">
-            <DollarSign size={16} className="text-emerald-400" />
+        <div className="aeos-glass p-4 rounded-lg text-center">
+          <div className="w-8 h-8 mx-auto mb-2 rounded-full bg-white/10 flex items-center justify-center">
+            <DollarSign size={16} className="text-blue-400" />
           </div>
-          <p className="text-xs text-emerald-400/60 font-medium">Igloo Finance v2.0</p>
-          <p className="text-xs text-emerald-400/40">Secure • Modern • Intuitive</p>
+          <p className="text-xs text-white/60 font-medium font-mono">AEOS v2.0</p>
+          <p className="text-xs text-white/40">Secure • Modern • Intuitive</p>
         </div>
       </div>
     </div>
