@@ -52,24 +52,26 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ onClose }) => {
           <X size={20} />
         </button>
 
-        <h2 className="text-2xl font-bold text-white mb-6">Add New Expense</h2>
+        <h2 className="text-2xl font-bold text-cyan-400 mb-6" style={{
+          textShadow: '0 0 20px rgba(0, 255, 255, 0.8)'
+        }}>Add New Expense</h2>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="relative">
-            <FileText className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/60" size={20} />
+            <FileText className="absolute left-3 top-1/2 transform -translate-y-1/2 text-cyan-400/70" size={20} />
             <input
               type="text"
               name="description"
               placeholder="Expense description"
               value={formData.description}
               onChange={handleInputChange}
-              className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/50 focus:outline-none focus:border-blue-400/50 transition-all"
+              className="w-full pl-10 pr-4 py-3 bg-cyan-400/5 border border-cyan-400/30 rounded-lg text-cyan-300 placeholder-cyan-400/50 focus:outline-none focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-400/25 transition-all"
               required
             />
           </div>
 
           <div className="relative">
-            <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/60" size={20} />
+            <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 text-cyan-400/70" size={20} />
             <input
               type="number"
               name="amount"
@@ -78,18 +80,18 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ onClose }) => {
               min="0"
               value={formData.amount}
               onChange={handleInputChange}
-              className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/50 focus:outline-none focus:border-blue-400/50 transition-all"
+              className="w-full pl-10 pr-4 py-3 bg-cyan-400/5 border border-cyan-400/30 rounded-lg text-cyan-300 placeholder-cyan-400/50 focus:outline-none focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-400/25 transition-all"
               required
             />
           </div>
 
           <div className="relative">
-            <Tag className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/60" size={20} />
+            <Tag className="absolute left-3 top-1/2 transform -translate-y-1/2 text-cyan-400/70" size={20} />
             <select
               name="category"
               value={formData.category}
               onChange={handleInputChange}
-              className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:border-blue-400/50 transition-all"
+              className="w-full pl-10 pr-4 py-3 bg-cyan-400/5 border border-cyan-400/30 rounded-lg text-cyan-300 focus:outline-none focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-400/25 transition-all"
               required
             >
               <option value="">Select category</option>
@@ -102,12 +104,12 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ onClose }) => {
           </div>
 
           <div className="relative">
-            <CreditCard className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/60" size={20} />
+            <CreditCard className="absolute left-3 top-1/2 transform -translate-y-1/2 text-cyan-400/70" size={20} />
             <select
               name="cardId"
               value={formData.cardId}
               onChange={handleInputChange}
-              className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:border-blue-400/50 transition-all"
+              className="w-full pl-10 pr-4 py-3 bg-cyan-400/5 border border-cyan-400/30 rounded-lg text-cyan-300 focus:outline-none focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-400/25 transition-all"
             >
               <option value="">Select card (optional)</option>
               {cards.map(card => (
@@ -126,10 +128,12 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ onClose }) => {
           )}
 
           {selectedCard && !hasInsufficientFunds && expenseAmount > 0 && (
-            <div className="bg-blue-900/20 border border-blue-400/30 rounded-lg p-3">
+            <div className="bg-cyan-400/10 border border-cyan-400/30 rounded-lg p-3">
               <div className="flex justify-between items-center text-sm">
-                <span className="text-white/70">Remaining balance:</span>
-                <span className="text-blue-400 font-semibold">
+                <span className="text-cyan-300/80">Remaining balance:</span>
+                <span className="text-cyan-400 font-semibold" style={{
+                  textShadow: '0 0 10px rgba(0, 255, 255, 0.5)'
+                }}>
                   ${(selectedCard.balance - expenseAmount).toFixed(2)}
                 </span>
               </div>
@@ -137,13 +141,13 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ onClose }) => {
           )}
 
           <div className="relative">
-            <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/60" size={20} />
+            <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-cyan-400/70" size={20} />
             <input
               type="date"
               name="date"
               value={formData.date}
               onChange={handleInputChange}
-              className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:border-blue-400/50 transition-all"
+              className="w-full pl-10 pr-4 py-3 bg-cyan-400/5 border border-cyan-400/30 rounded-lg text-cyan-300 focus:outline-none focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-400/25 transition-all"
               required
             />
           </div>

@@ -24,10 +24,12 @@ const Dashboard: React.FC = () => {
     <div className="space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-4xl font-bold text-white mb-2 tracking-tight">
+        <h1 className="text-4xl font-bold text-cyan-400 mb-2 tracking-tight" style={{
+          textShadow: '0 0 30px rgba(0, 255, 255, 0.8), 0 0 60px rgba(0, 255, 255, 0.4)'
+        }}>
           Financial Dashboard
         </h1>
-        <p className="text-white/60 text-lg">
+        <p className="text-cyan-300/80 text-lg">
           Track and analyze your expenses with intelligent insights
         </p>
       </div>
@@ -51,40 +53,48 @@ const Dashboard: React.FC = () => {
         <div className="aeos-card aeos-interactive aeos-parallax p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-white/60 text-sm mb-1 font-mono">Total Expenses</p>
-              <p className="text-2xl font-bold text-white">${totalExpenses.toFixed(2)}</p>
+              <p className="text-cyan-300/70 text-sm mb-1 font-mono">Total Expenses</p>
+              <p className="text-2xl font-bold text-cyan-400" style={{
+                textShadow: '0 0 15px rgba(0, 255, 255, 0.6)'
+              }}>${totalExpenses.toFixed(2)}</p>
             </div>
-            <DollarSign className="text-blue-400 opacity-60" size={24} />
+            <DollarSign className="text-cyan-400 opacity-80" size={24} />
           </div>
         </div>
 
         <div className="aeos-card aeos-interactive aeos-parallax p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-white/60 text-sm mb-1 font-mono">This Month</p>
-              <p className="text-2xl font-bold text-white">${monthlyTotal.toFixed(2)}</p>
+              <p className="text-cyan-300/70 text-sm mb-1 font-mono">This Month</p>
+              <p className="text-2xl font-bold text-cyan-400" style={{
+                textShadow: '0 0 15px rgba(0, 255, 255, 0.6)'
+              }}>${monthlyTotal.toFixed(2)}</p>
             </div>
-            <Calendar className="text-blue-400 opacity-60" size={24} />
+            <Calendar className="text-cyan-400 opacity-80" size={24} />
           </div>
         </div>
 
         <div className="aeos-card aeos-interactive aeos-parallax p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-white/60 text-sm mb-1 font-mono">Card Balance</p>
-              <p className="text-2xl font-bold text-white">${totalCardBalance.toFixed(2)}</p>
+              <p className="text-cyan-300/70 text-sm mb-1 font-mono">Card Balance</p>
+              <p className="text-2xl font-bold text-cyan-400" style={{
+                textShadow: '0 0 15px rgba(0, 255, 255, 0.6)'
+              }}>${totalCardBalance.toFixed(2)}</p>
             </div>
-            <TrendingUp className="text-blue-400 opacity-60" size={24} />
+            <TrendingUp className="text-cyan-400 opacity-80" size={24} />
           </div>
         </div>
 
         <div className="aeos-card aeos-interactive aeos-parallax p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-white/60 text-sm mb-1 font-mono">Transactions</p>
-              <p className="text-2xl font-bold text-white">{expenses.length}</p>
+              <p className="text-cyan-300/70 text-sm mb-1 font-mono">Transactions</p>
+              <p className="text-2xl font-bold text-cyan-400" style={{
+                textShadow: '0 0 15px rgba(0, 255, 255, 0.6)'
+              }}>{expenses.length}</p>
             </div>
-            <TrendingDown className="text-blue-400 opacity-60" size={24} />
+            <TrendingDown className="text-cyan-400 opacity-80" size={24} />
           </div>
         </div>
       </div>
@@ -92,29 +102,39 @@ const Dashboard: React.FC = () => {
       {/* Chart Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div className="aeos-card aeos-interactive p-6">
-          <h3 className="text-xl font-semibold text-white mb-4">Expense Distribution</h3>
+          <h3 className="text-xl font-semibold text-cyan-400 mb-4" style={{
+            textShadow: '0 0 15px rgba(0, 255, 255, 0.6)'
+          }}>Expense Distribution</h3>
           <ExpenseChart />
         </div>
 
         <div className="aeos-card aeos-interactive p-6">
-          <h3 className="text-xl font-semibold text-white mb-4">Recent Activity</h3>
+          <h3 className="text-xl font-semibold text-cyan-400 mb-4" style={{
+            textShadow: '0 0 15px rgba(0, 255, 255, 0.6)'
+          }}>Recent Activity</h3>
           <div className="space-y-4 max-h-96 overflow-y-auto">
             {expenses.slice(-5).reverse().map((expense, index) => (
-              <div key={expense.id} className="flex items-center justify-between py-3 border-b border-white/10">
+              <div key={expense.id} className="flex items-center justify-between py-3 border-b border-cyan-400/20 hover:bg-cyan-400/5 transition-colors duration-300">
                 <div>
-                  <p className="font-medium text-white">{expense.description}</p>
-                  <p className="text-sm text-white/60 font-mono">{expense.category} • {expense.date}</p>
+                  <p className="font-medium text-cyan-300">{expense.description}</p>
+                  <p className="text-sm text-cyan-400/70 font-mono">{expense.category} • {expense.date}</p>
                 </div>
-                <span className="font-bold text-lg text-white">${expense.amount.toFixed(2)}</span>
+                <span className="font-bold text-lg text-cyan-400" style={{
+                  textShadow: '0 0 10px rgba(0, 255, 255, 0.5)'
+                }}>${expense.amount.toFixed(2)}</span>
               </div>
             ))}
             {expenses.length === 0 && (
               <div className="text-center py-12">
-                <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-white/10 flex items-center justify-center">
-                  <BarChart3 className="text-blue-400 opacity-40" size={32} />
+                <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-cyan-400/10 flex items-center justify-center" style={{
+                  boxShadow: '0 0 20px rgba(0, 255, 255, 0.3)'
+                }}>
+                  <BarChart3 className="text-cyan-400 opacity-60" size={32} />
                 </div>
-                <h4 className="text-lg font-semibold text-white mb-2">No expenses yet</h4>
-                <p className="text-white/60 mb-4">Add some expenses to see your analytics</p>
+                <h4 className="text-lg font-semibold text-cyan-400 mb-2" style={{
+                  textShadow: '0 0 15px rgba(0, 255, 255, 0.6)'
+                }}>No expenses yet</h4>
+                <p className="text-cyan-300/70 mb-4">Add some expenses to see your analytics</p>
                 <button 
                   onClick={() => setShowAddModal(true)}
                   className="aeos-button-primary px-6 py-2 rounded-lg"
@@ -128,8 +148,10 @@ const Dashboard: React.FC = () => {
       </div>
 
       {/* Category Breakdown */}
-      <div className="aeos-card p-6 mt-8">
-        <h3 className="text-xl font-semibold text-white mb-4">Category Breakdown</h3>
+      <div className="aeos-card aeos-interactive p-6 mt-8">
+        <h3 className="text-xl font-semibold text-cyan-400 mb-4" style={{
+          textShadow: '0 0 15px rgba(0, 255, 255, 0.6)'
+        }}>Category Breakdown</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {categories.map((category) => {
             const categoryExpenses = expenses.filter(exp => exp.category === category.name);
@@ -137,18 +159,20 @@ const Dashboard: React.FC = () => {
             const percentage = totalExpenses > 0 ? (categoryTotal / totalExpenses) * 100 : 0;
             
             return (
-              <div key={category.name} className="bg-white/5 p-4 rounded-lg border border-white/10">
+              <div key={category.name} className="bg-cyan-400/5 p-4 rounded-lg border border-cyan-400/20 hover:bg-cyan-400/10 transition-all duration-300">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="font-medium text-white">{category.name}</span>
-                  <span className="text-sm text-white/70 font-mono">{percentage.toFixed(1)}%</span>
+                  <span className="font-medium text-cyan-300">{category.name}</span>
+                  <span className="text-sm text-cyan-400/80 font-mono">{percentage.toFixed(1)}%</span>
                 </div>
-                <div className="w-full bg-white/10 rounded-full h-2 mb-2">
+                <div className="w-full bg-cyan-400/20 rounded-full h-2 mb-2">
                   <div 
-                    className="bg-blue-400 h-2 rounded-full transition-all duration-500"
+                    className="bg-gradient-to-r from-cyan-400 to-cyan-300 h-2 rounded-full transition-all duration-500 shadow-lg shadow-cyan-400/30"
                     style={{ width: `${percentage}%` }}
                   ></div>
                 </div>
-                <span className="text-lg font-bold text-white">${categoryTotal.toFixed(2)}</span>
+                <span className="text-lg font-bold text-cyan-400" style={{
+                  textShadow: '0 0 10px rgba(0, 255, 255, 0.5)'
+                }}>${categoryTotal.toFixed(2)}</span>
               </div>
             );
           })}
