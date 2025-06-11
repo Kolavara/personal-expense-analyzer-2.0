@@ -48,7 +48,7 @@ const Dashboard: React.FC = () => {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="aeos-card p-6">
+        <div className="aeos-card aeos-interactive aeos-parallax p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-white/60 text-sm mb-1 font-mono">Total Expenses</p>
@@ -58,7 +58,7 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
 
-        <div className="aeos-card p-6">
+        <div className="aeos-card aeos-interactive aeos-parallax p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-white/60 text-sm mb-1 font-mono">This Month</p>
@@ -68,7 +68,7 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
 
-        <div className="aeos-card p-6">
+        <div className="aeos-card aeos-interactive aeos-parallax p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-white/60 text-sm mb-1 font-mono">Card Balance</p>
@@ -78,7 +78,7 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
 
-        <div className="aeos-card p-6">
+        <div className="aeos-card aeos-interactive aeos-parallax p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-white/60 text-sm mb-1 font-mono">Transactions</p>
@@ -91,12 +91,12 @@ const Dashboard: React.FC = () => {
 
       {/* Chart Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className="aeos-card p-6">
+        <div className="aeos-card aeos-interactive p-6">
           <h3 className="text-xl font-semibold text-white mb-4">Expense Distribution</h3>
           <ExpenseChart />
         </div>
 
-        <div className="aeos-card p-6">
+        <div className="aeos-card aeos-interactive p-6">
           <h3 className="text-xl font-semibold text-white mb-4">Recent Activity</h3>
           <div className="space-y-4 max-h-96 overflow-y-auto">
             {expenses.slice(-5).reverse().map((expense, index) => (

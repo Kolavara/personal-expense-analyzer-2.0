@@ -82,22 +82,63 @@ body {
   box-shadow: 0 8px 25px var(--accent-glow);
 }
 
-.typing-animation::after {
-  content: '|';
-  animation: blink 1s infinite;
-  color: var(--igloo-emerald);
+/* Igloo-inspired interactive effects */
+.aeos-interactive {
+  position: relative;
+  overflow: hidden;
 }
 
-@keyframes blink {
-  0%, 50% { opacity: 1; }
-  51%, 100% { opacity: 0; }
+.aeos-interactive::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.5s ease;
 }
 
-.gradient-text {
-  background: linear-gradient(135deg, #10b981, #06b6d4);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+.aeos-interactive:hover::before {
+  left: 100%;
+}
+
+.aeos-parallax {
+  transform: translateZ(0);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.aeos-parallax:hover {
+  transform: translate3d(0, -4px, 0);
+}
+
+.aeos-fade-in {
+  animation: aeosFedeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  opacity: 0;
+}
+
+@keyframes aeosFedeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.aeos-pulse {
+  animation: aeosPulse 2s infinite;
+}
+
+@keyframes aeosPulse {
+  0%, 100% { 
+    box-shadow: 0 0 0 0 var(--accent-glow);
+  }
+  50% { 
+    box-shadow: 0 0 0 10px transparent;
+  }
 }
 
 .hover-glow:hover {

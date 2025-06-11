@@ -152,14 +152,14 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ onClose }) => {
             <button
               type="submit"
               disabled={hasInsufficientFunds}
-              className="flex-1 igloo-button py-3 rounded-xl hover-glow font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 aeos-button-primary py-3 rounded-lg font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Add Expense
             </button>
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-6 py-3 bg-slate-700 text-slate-300 rounded-xl hover:bg-slate-600 transition-colors"
+              className="flex-1 aeos-button py-3 rounded-lg transition-colors"
             >
               Cancel
             </button>
