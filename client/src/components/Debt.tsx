@@ -133,12 +133,14 @@ const Debt: React.FC = () => {
     : 0;
 
   return (
-    <div className="p-6 ml-64">
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold matrix-glow mb-2 typing-animation">
+    <div className="space-y-8">
+      <div>
+        <h1 className="text-4xl font-bold text-cyan-400 mb-2 tracking-tight" style={{
+          textShadow: '0 0 30px rgba(0, 255, 255, 0.8), 0 0 60px rgba(0, 255, 255, 0.4)'
+        }}>
           Debt Management
         </h1>
-        <p className="text-green-400/70 text-lg">
+        <p className="text-cyan-300/80 text-lg">
           Track your debts and calculate payoff timelines
         </p>
       </div>

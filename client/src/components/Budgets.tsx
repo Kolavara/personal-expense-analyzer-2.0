@@ -41,21 +41,23 @@ const Budgets: React.FC = () => {
   };
 
   return (
-    <div className="p-6 ml-64">
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold matrix-glow mb-2 typing-animation">
+    <div className="space-y-8">
+      <div>
+        <h1 className="text-4xl font-bold text-cyan-400 mb-2 tracking-tight" style={{
+          textShadow: '0 0 30px rgba(0, 255, 255, 0.8), 0 0 60px rgba(0, 255, 255, 0.4)'
+        }}>
           Budget Management
         </h1>
-        <p className="text-green-400/70 text-lg">
+        <p className="text-cyan-300/80 text-lg">
           Set limits and track your spending goals
         </p>
       </div>
 
       {/* Add Budget Button */}
-      <div className="mb-8">
+      <div>
         <button
           onClick={() => setShowAddForm(!showAddForm)}
-          className="matrix-button px-6 py-3 rounded-lg hover-glow flex items-center space-x-2"
+          className="aeos-button-primary px-6 py-3 rounded-lg flex items-center space-x-2"
         >
           <Plus size={20} />
           <span>Create Budget</span>
@@ -64,10 +66,10 @@ const Budgets: React.FC = () => {
 
       {/* Add Budget Form */}
       {showAddForm && (
-        <div className="matrix-card p-6 rounded-lg mb-8">
-          <h3 className="text-xl font-semibold matrix-glow mb-4">Create New Budget</h3>
+        <div className="aeos-card p-6">
+          <h3 className="text-xl font-semibold text-cyan-400 mb-4" style={{textShadow: '0 0 15px rgba(0, 255, 255, 0.6)'}}>Create New Budget</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <select className="p-3 bg-gray-800/50 matrix-border rounded-lg text-green-400 focus:outline-none focus:ring-2 focus:ring-green-400/50">
+            <select className="p-3 bg-cyan-400/5 border border-cyan-400/30 rounded-lg text-cyan-300 focus:outline-none focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-400/25 transition-all">
               <option value="">Select Category</option>
               {categories.map(category => (
                 <option key={category.name} value={category.name}>{category.name}</option>
@@ -76,21 +78,21 @@ const Budgets: React.FC = () => {
             <input
               type="number"
               placeholder="Budget Amount"
-              className="p-3 bg-gray-800/50 matrix-border rounded-lg text-green-400 placeholder-green-400/50 focus:outline-none focus:ring-2 focus:ring-green-400/50"
+              className="p-3 bg-cyan-400/5 border border-cyan-400/30 rounded-lg text-cyan-300 placeholder-cyan-400/50 focus:outline-none focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-400/25 transition-all"
             />
-            <select className="p-3 bg-gray-800/50 matrix-border rounded-lg text-green-400 focus:outline-none focus:ring-2 focus:ring-green-400/50">
+            <select className="p-3 bg-cyan-400/5 border border-cyan-400/30 rounded-lg text-cyan-300 focus:outline-none focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-400/25 transition-all">
               <option value="monthly">Monthly</option>
               <option value="weekly">Weekly</option>
               <option value="yearly">Yearly</option>
             </select>
           </div>
           <div className="flex space-x-4 mt-4">
-            <button className="matrix-button px-6 py-2 rounded-lg hover-glow">
+            <button className="aeos-button-primary px-6 py-2 rounded-lg">
               Create Budget
             </button>
             <button 
               onClick={() => setShowAddForm(false)}
-              className="px-6 py-2 bg-gray-700 text-gray-300 rounded-lg hover:bg-gray-600 transition-colors"
+              className="aeos-button px-6 py-2 rounded-lg"
             >
               Cancel
             </button>
@@ -107,13 +109,13 @@ const Budgets: React.FC = () => {
           const status = getBudgetStatus(spent, budget.limit);
 
           return (
-            <div key={budget.id} className="matrix-card p-6 rounded-lg hover-glow transition-all duration-300">
+            <div key={budget.id} className="aeos-card aeos-interactive aeos-parallax p-6">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-green-400">{budget.category}</h3>
+                <h3 className="text-lg font-semibold text-cyan-400" style={{textShadow: '0 0 10px rgba(0, 255, 255, 0.5)'}}>{budget.category}</h3>
                 <div className="flex items-center space-x-2">
                   {status.status === 'over' && <AlertTriangle className="text-red-400" size={20} />}
                   {status.status === 'warning' && <TrendingUp className="text-yellow-400" size={20} />}
-                  {status.status === 'good' && <Target className="text-green-400" size={20} />}
+                  {status.status === 'good' && <Target className="text-cyan-400" size={20} />}
                 </div>
               </div>
 
