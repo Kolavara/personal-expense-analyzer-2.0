@@ -30,12 +30,13 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView }) => {
   ];
 
   return (
-    <div className="w-64 h-screen igloo-card border-r-2 border-emerald-400/20 p-6 fixed left-0 top-0 z-20">
+    <div className="w-64 h-screen aeos-glass border-r border-white/10 p-6 fixed left-0 top-0 z-20">
       <div className="mb-8">
-        <h1 className="text-xl font-bold igloo-glow gradient-text typing-animation">
-          Igloo Finance
+        <h1 className="text-2xl font-bold text-white tracking-tight">
+          AEOS
         </h1>
-        <p className="text-emerald-400/60 text-sm mt-1">Personal Finance Manager</p>
+        <p className="text-white/60 text-sm mt-1 font-mono">Finance</p>
+        <div className="w-12 h-0.5 bg-gradient-to-r from-blue-400 to-transparent mt-2"></div>
       </div>
       
       <nav className="space-y-2">
@@ -47,10 +48,10 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView }) => {
             <button
               key={item.id}
               onClick={() => setActiveView(item.id as ActiveView)}
-              className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-300 text-left group ${
+              className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-300 text-left group ${
                 isActive
-                  ? 'bg-emerald-400/20 text-emerald-400 igloo-border pulse-glow'
-                  : 'text-emerald-400/70 hover:bg-emerald-400/10 hover:text-emerald-400 hover-glow'
+                  ? 'bg-white/10 text-white border border-blue-400/50'
+                  : 'text-white/70 hover:bg-white/5 hover:text-white'
               }`}
             >
               <Icon size={18} className={`transition-transform duration-300 ${isActive ? 'scale-110' : 'group-hover:scale-105'}`} />

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import MatrixBackground from './components/MatrixBackground';
 import Sidebar from './components/Sidebar';
 import Dashboard from './components/Dashboard';
 import Transactions from './components/Transactions';
@@ -43,14 +42,24 @@ function App() {
 
   return (
     <ExpenseProvider>
-      <div className={`min-h-screen bg-gray-900 text-green-400 transition-opacity duration-1000 ${
+      <div className={`min-h-screen transition-opacity duration-1000 ${
         isLoaded ? 'opacity-100' : 'opacity-0'
       }`}>
-        <MatrixBackground />
-        <div className="flex">
+        {/* Subtle background pattern */}
+        <div className="fixed inset-0 opacity-20">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                             radial-gradient(circle at 80% 20%, rgba(74, 144, 226, 0.1) 0%, transparent 50%),
+                             radial-gradient(circle at 40% 80%, rgba(255, 255, 255, 0.05) 0%, transparent 50%)`
+          }} />
+        </div>
+        
+        <div className="flex relative z-10">
           <Sidebar activeView={activeView} setActiveView={setActiveView} />
-          <main className="flex-1 p-6 relative z-10">
-            {renderContent()}
+          <main className="flex-1 p-8">
+            <div className="max-w-7xl mx-auto">
+              {renderContent()}
+            </div>
           </main>
         </div>
       </div>
