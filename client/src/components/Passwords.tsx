@@ -167,12 +167,14 @@ const Passwords: React.FC = () => {
   };
 
   return (
-    <div className="p-6 ml-64">
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold igloo-glow mb-2 typing-animation">
+    <div className="space-y-8">
+      <div>
+        <h1 className="text-4xl font-bold text-cyan-400 mb-2 tracking-tight" style={{
+          textShadow: '0 0 30px rgba(0, 255, 255, 0.8), 0 0 60px rgba(0, 255, 255, 0.4)'
+        }}>
           Bank Passwords
         </h1>
-        <p className="text-emerald-400/70 text-lg">
+        <p className="text-cyan-300/80 text-lg">
           Securely store your banking credentials
         </p>
       </div>
@@ -190,11 +192,11 @@ const Passwords: React.FC = () => {
 
       {/* Summary Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div className="igloo-card p-6 rounded-2xl hover-glow transition-all duration-300">
+        <div className="glass-card p-6 rounded-2xl hover-glow transition-all duration-300">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-emerald-400/70 text-sm mb-1">Total Accounts</p>
-              <p className="text-2xl font-bold igloo-glow">{credentials.length}</p>
+              <p className="text-cyan-300/70 text-sm mb-1">Total Accounts</p>
+              <p className="text-2xl font-bold text-cyan-400" style={{textShadow: '0 0 20px rgba(0, 255, 255, 0.6)'}}>{credentials.length}</p>
             </div>
             <Shield className="text-emerald-400 opacity-60" size={24} />
           </div>

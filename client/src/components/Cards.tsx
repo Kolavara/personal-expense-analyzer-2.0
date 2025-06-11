@@ -121,11 +121,11 @@ const Cards: React.FC = () => {
 
       {/* Summary Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div className="igloo-card p-6 rounded-2xl hover-glow transition-all duration-300">
+        <div className="glass-card p-6 rounded-2xl hover-glow transition-all duration-300">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-emerald-400/70 text-sm mb-1">Total Cards</p>
-              <p className="text-2xl font-bold igloo-glow">{cards.length}</p>
+              <p className="text-cyan-300/70 text-sm mb-1">Total Cards</p>
+              <p className="text-2xl font-bold text-cyan-400" style={{textShadow: '0 0 20px rgba(0, 255, 255, 0.6)'}}>{cards.length}</p>
             </div>
             <CreditCard className="text-emerald-400 opacity-60" size={24} />
           </div>

@@ -52,30 +52,30 @@ const Analytics: React.FC = () => {
 
       {/* Key Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div className="matrix-card p-6 rounded-lg hover-glow transition-all duration-300">
+        <div className="glass-card p-6 rounded-2xl hover-glow transition-all duration-300">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-green-400/70 text-sm mb-1">Monthly Change</p>
-              <p className={`text-2xl font-bold ${monthlyChange >= 0 ? 'text-red-400' : 'text-green-400'}`}>
+              <p className="text-cyan-300/70 text-sm mb-1">Monthly Change</p>
+              <p className={`text-2xl font-bold ${monthlyChange >= 0 ? 'text-red-400' : 'text-cyan-400'}`}>
                 {monthlyChange >= 0 ? '+' : ''}{monthlyChange.toFixed(1)}%
               </p>
             </div>
             {monthlyChange >= 0 ? 
               <TrendingUp className="text-red-400 opacity-60" size={24} /> :
-              <TrendingDown className="text-green-400 opacity-60" size={24} />
+              <TrendingDown className="text-cyan-400 opacity-60" size={24} />
             }
           </div>
         </div>
 
-        <div className="matrix-card p-6 rounded-lg hover-glow transition-all duration-300">
+        <div className="glass-card p-6 rounded-2xl hover-glow transition-all duration-300">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-green-400/70 text-sm mb-1">Daily Average</p>
-              <p className="text-2xl font-bold matrix-glow">
+              <p className="text-cyan-300/70 text-sm mb-1">Daily Average</p>
+              <p className="text-2xl font-bold text-cyan-400" style={{textShadow: '0 0 20px rgba(0, 255, 255, 0.6)'}}>
                 ${expenses.length > 0 ? (totalExpenses / Math.max(1, Math.ceil((Date.now() - new Date(expenses[0]?.date || Date.now()).getTime()) / (1000 * 60 * 60 * 24)))).toFixed(2) : '0.00'}
               </p>
             </div>
-            <BarChart3 className="text-green-400 opacity-60" size={24} />
+            <BarChart3 className="text-cyan-400 opacity-60" size={24} />
           </div>
         </div>
 

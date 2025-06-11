@@ -147,10 +147,10 @@ const Debt: React.FC = () => {
 
       {/* Summary Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div className="matrix-card p-6 rounded-lg hover-glow transition-all duration-300">
+        <div className="glass-card p-6 rounded-2xl hover-glow transition-all duration-300">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-green-400/70 text-sm mb-1">Total Debt</p>
+              <p className="text-cyan-300/70 text-sm mb-1">Total Debt</p>
               <p className="text-2xl font-bold text-red-400">${totalDebt.toFixed(2)}</p>
             </div>
             <TrendingDown className="text-red-400 opacity-60" size={24} />
