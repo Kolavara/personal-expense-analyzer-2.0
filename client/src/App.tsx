@@ -56,7 +56,7 @@ function App() {
         
         <div className="flex relative z-10">
           <Sidebar activeView={activeView} setActiveView={setActiveView} />
-          <main className="flex-1 p-8">
+          <main className="flex-1 ml-64 p-8">
             <div className="max-w-7xl mx-auto">
               {renderContent()}
             </div>
