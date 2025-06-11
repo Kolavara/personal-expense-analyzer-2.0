@@ -69,35 +69,37 @@ const Transactions: React.FC = () => {
   const expenseCategories = Array.from(new Set(expenses.map(exp => exp.category)));
 
   return (
-    <div className="p-6 ml-64">
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold igloo-glow mb-2 typing-animation">
+    <div className="space-y-8">
+      <div>
+        <h1 className="text-4xl font-bold text-cyan-400 mb-2 tracking-tight" style={{
+          textShadow: '0 0 30px rgba(0, 255, 255, 0.8), 0 0 60px rgba(0, 255, 255, 0.4)'
+        }}>
           Transactions
         </h1>
-        <p className="text-emerald-400/70 text-lg">
+        <p className="text-cyan-300/80 text-lg">
           Manage and track all your financial transactions
         </p>
       </div>
 
       {/* Controls */}
-      <div className="flex flex-col sm:flex-row gap-4 mb-8">
+      <div className="flex flex-col sm:flex-row gap-4">
         <div className="flex-1 relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-emerald-400/60" size={20} />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-cyan-400/70" size={20} />
           <input
             type="text"
             placeholder="Search transactions..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-3 bg-slate-800/50 igloo-border rounded-xl text-emerald-400 placeholder-emerald-400/50 focus:outline-none focus:ring-2 focus:ring-emerald-400/50"
+            className="w-full pl-10 pr-4 py-3 bg-cyan-400/5 border border-cyan-400/30 rounded-lg text-cyan-300 placeholder-cyan-400/50 focus:outline-none focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-400/25 transition-all"
           />
         </div>
         
         <div className="relative">
-          <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-emerald-400/60" size={20} />
+          <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-cyan-400/70" size={20} />
           <select
             value={filterCategory}
             onChange={(e) => setFilterCategory(e.target.value)}
-            className="pl-10 pr-8 py-3 bg-slate-800/50 igloo-border rounded-xl text-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-400/50"
+            className="pl-10 pr-8 py-3 bg-cyan-400/5 border border-cyan-400/30 rounded-lg text-cyan-300 focus:outline-none focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-400/25 transition-all"
           >
             <option value="">All Categories</option>
             {expenseCategories.map(category => (
@@ -108,7 +110,7 @@ const Transactions: React.FC = () => {
 
         <button
           onClick={() => setShowAddModal(true)}
-          className="igloo-button px-6 py-3 rounded-xl hover-glow flex items-center space-x-2"
+          className="aeos-button-primary px-6 py-3 rounded-lg flex items-center space-x-2"
         >
           <Plus size={20} />
           <span>Add Transaction</span>
@@ -116,23 +118,23 @@ const Transactions: React.FC = () => {
       </div>
 
       {/* Transactions Table */}
-      <div className="igloo-card rounded-2xl overflow-hidden">
-        <div className="overflow-x-auto scroll-glow">
+      <div className="aeos-card aeos-interactive overflow-hidden">
+        <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-slate-800/50">
+            <thead className="bg-cyan-400/10">
               <tr>
-                <th className="text-left py-4 px-6 text-emerald-400 font-semibold">Date</th>
-                <th className="text-left py-4 px-6 text-emerald-400 font-semibold">Description</th>
-                <th className="text-left py-4 px-6 text-emerald-400 font-semibold">Category</th>
-                <th className="text-left py-4 px-6 text-emerald-400 font-semibold">Card</th>
-                <th className="text-right py-4 px-6 text-emerald-400 font-semibold">Amount</th>
-                <th className="text-center py-4 px-6 text-emerald-400 font-semibold">Actions</th>
+                <th className="text-left py-4 px-6 text-cyan-400 font-semibold" style={{textShadow: '0 0 10px rgba(0, 255, 255, 0.6)'}}>Date</th>
+                <th className="text-left py-4 px-6 text-cyan-400 font-semibold" style={{textShadow: '0 0 10px rgba(0, 255, 255, 0.6)'}}>Description</th>
+                <th className="text-left py-4 px-6 text-cyan-400 font-semibold" style={{textShadow: '0 0 10px rgba(0, 255, 255, 0.6)'}}>Category</th>
+                <th className="text-left py-4 px-6 text-cyan-400 font-semibold" style={{textShadow: '0 0 10px rgba(0, 255, 255, 0.6)'}}>Card</th>
+                <th className="text-right py-4 px-6 text-cyan-400 font-semibold" style={{textShadow: '0 0 10px rgba(0, 255, 255, 0.6)'}}>Amount</th>
+                <th className="text-center py-4 px-6 text-cyan-400 font-semibold" style={{textShadow: '0 0 10px rgba(0, 255, 255, 0.6)'}}>Actions</th>
               </tr>
             </thead>
             <tbody>
               {filteredExpenses.length > 0 ? (
                 filteredExpenses.map((expense) => (
-                  <tr key={expense.id} className="border-t border-emerald-400/20 hover:bg-slate-800/30 transition-colors">
+                  <tr key={expense.id} className="border-t border-cyan-400/20 hover:bg-cyan-400/5 transition-colors">
                     {editingExpense === expense.id ? (
                       <>
                         <td className="py-4 px-6">
@@ -140,7 +142,7 @@ const Transactions: React.FC = () => {
                             type="date"
                             value={editFormData.date}
                             onChange={(e) => setEditFormData({ ...editFormData, date: e.target.value })}
-                            className="w-full p-2 bg-slate-800/50 igloo-border rounded-lg text-emerald-400 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400/50"
+                            className="w-full p-2 bg-cyan-400/5 border border-cyan-400/30 rounded-lg text-cyan-300 text-sm focus:outline-none focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-400/25 transition-all"
                           />
                         </td>
                         <td className="py-4 px-6">
@@ -148,7 +150,7 @@ const Transactions: React.FC = () => {
                             type="text"
                             value={editFormData.description}
                             onChange={(e) => setEditFormData({ ...editFormData, description: e.target.value })}
-                            className="w-full p-2 bg-slate-800/50 igloo-border rounded-lg text-emerald-400 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400/50"
+                            className="w-full p-2 bg-cyan-400/5 border border-cyan-400/30 rounded-lg text-cyan-300 text-sm focus:outline-none focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-400/25 transition-all"
                             placeholder="Description"
                             required
                           />
@@ -157,7 +159,7 @@ const Transactions: React.FC = () => {
                           <select
                             value={editFormData.category}
                             onChange={(e) => setEditFormData({ ...editFormData, category: e.target.value })}
-                            className="w-full p-2 bg-slate-800/50 igloo-border rounded-lg text-emerald-400 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400/50"
+                            className="w-full p-2 bg-cyan-400/5 border border-cyan-400/30 rounded-lg text-cyan-300 text-sm focus:outline-none focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-400/25 transition-all"
                             required
                           >
                             <option value="">Select category</option>
