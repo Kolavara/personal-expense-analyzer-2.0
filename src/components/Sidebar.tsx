@@ -30,11 +30,12 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView }) => {
   ];
 
   return (
-    <div className="w-64 h-screen matrix-card border-r-2 border-green-400/30 p-4 fixed left-0 top-0 z-20">
+    <div className="w-64 h-screen igloo-card border-r-2 border-emerald-400/20 p-6 fixed left-0 top-0 z-20">
       <div className="mb-8">
-        <h1 className="text-xl font-bold matrix-glow gradient-text typing-animation">
-          Financial Management
+        <h1 className="text-xl font-bold igloo-glow gradient-text typing-animation">
+          Igloo Finance
         </h1>
+        <p className="text-emerald-400/60 text-sm mt-1">Personal Finance Manager</p>
       </div>
       
       <nav className="space-y-2">
@@ -46,23 +47,26 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView }) => {
             <button
               key={item.id}
               onClick={() => setActiveView(item.id as ActiveView)}
-              className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-300 text-left ${
+              className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-300 text-left group ${
                 isActive
-                  ? 'bg-green-400/20 text-green-400 matrix-border pulse-glow'
-                  : 'text-green-400/70 hover:bg-green-400/10 hover:text-green-400 hover-glow'
+                  ? 'bg-emerald-400/20 text-emerald-400 igloo-border pulse-glow'
+                  : 'text-emerald-400/70 hover:bg-emerald-400/10 hover:text-emerald-400 hover-glow'
               }`}
             >
-              <Icon size={18} />
+              <Icon size={18} className={`transition-transform duration-300 ${isActive ? 'scale-110' : 'group-hover:scale-105'}`} />
               <span className="font-medium">{item.label}</span>
             </button>
           );
         })}
       </nav>
       
-      <div className="absolute bottom-4 left-4 right-4">
-        <div className="matrix-card p-3 rounded-lg text-center">
-          <p className="text-xs text-green-400/60">Matrix Finance v2.0</p>
-          <p className="text-xs text-green-400/40">Secure • Encrypted • Anonymous</p>
+      <div className="absolute bottom-6 left-6 right-6">
+        <div className="igloo-card p-4 rounded-xl text-center border border-emerald-400/20">
+          <div className="w-8 h-8 mx-auto mb-2 rounded-full bg-emerald-400/20 flex items-center justify-center">
+            <DollarSign size={16} className="text-emerald-400" />
+          </div>
+          <p className="text-xs text-emerald-400/60 font-medium">Igloo Finance v2.0</p>
+          <p className="text-xs text-emerald-400/40">Secure • Modern • Intuitive</p>
         </div>
       </div>
     </div>

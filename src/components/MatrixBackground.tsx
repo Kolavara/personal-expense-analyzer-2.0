@@ -19,8 +19,8 @@ const MatrixBackground: React.FC = () => {
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
-    // Matrix characters
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()_+-=[]{}|;:,.<>?';
+    // Matrix characters - more financial/tech focused
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$€£¥₿@#%^&*()_+-=[]{}|;:,.<>?';
     const charArray = chars.split('');
 
     const fontSize = 14;
@@ -33,13 +33,13 @@ const MatrixBackground: React.FC = () => {
     }
 
     const draw = () => {
-      // Create fade effect
-      ctx.fillStyle = 'rgba(13, 17, 23, 0.05)';
+      // Create fade effect with darker background
+      ctx.fillStyle = 'rgba(15, 23, 42, 0.08)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Set text properties
-      ctx.fillStyle = '#00ff00';
-      ctx.font = `${fontSize}px 'Courier Prime', monospace`;
+      // Set text properties with emerald green
+      ctx.fillStyle = '#10b981';
+      ctx.font = `${fontSize}px 'Inter', monospace`;
 
       // Draw characters
       for (let i = 0; i < drops.length; i++) {
@@ -47,18 +47,21 @@ const MatrixBackground: React.FC = () => {
         const x = i * fontSize;
         const y = drops[i] * fontSize;
 
+        // Add some variation in opacity
+        const opacity = Math.random() * 0.8 + 0.2;
+        ctx.fillStyle = `rgba(16, 185, 129, ${opacity})`;
         ctx.fillText(char, x, y);
 
         // Reset drop randomly or when it reaches bottom
-        if (y > canvas.height && Math.random() > 0.975) {
+        if (y > canvas.height && Math.random() > 0.98) {
           drops[i] = 0;
         }
 
-        drops[i] += Math.random() * 2 + 0.5;
+        drops[i] += Math.random() * 1.5 + 0.3;
       }
     };
 
-    const interval = setInterval(draw, 50);
+    const interval = setInterval(draw, 60);
 
     return () => {
       clearInterval(interval);

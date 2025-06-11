@@ -1,24 +1,25 @@
-@import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --matrix-green: #00ff00;
-  --matrix-dark: #0d1117;
-  --matrix-card: #161b22;
-  --matrix-border: #21262d;
-  --matrix-accent: #ff1744;
+  --igloo-emerald: #10b981;
+  --igloo-dark: #0f172a;
+  --igloo-card: #1e293b;
+  --igloo-border: #334155;
+  --igloo-accent: #06b6d4;
 }
 
 * {
-  font-family: 'Courier Prime', 'Courier New', Courier, monospace;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
 }
 
 body {
-  background-color: var(--matrix-dark);
-  color: var(--matrix-green);
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  color: var(--igloo-emerald);
   overflow-x: hidden;
+  font-weight: 400;
 }
 
 #matrix-canvas {
@@ -28,42 +29,48 @@ body {
   width: 100%;
   height: 100%;
   z-index: -1;
-  opacity: 0.3;
+  opacity: 0.15;
 }
 
-.matrix-glow {
-  text-shadow: 0 0 10px var(--matrix-green), 0 0 20px var(--matrix-green), 0 0 40px var(--matrix-green);
+.igloo-glow {
+  text-shadow: 0 0 20px rgba(16, 185, 129, 0.5), 0 0 40px rgba(16, 185, 129, 0.3);
+  color: #10b981;
 }
 
-.matrix-border {
-  border: 1px solid var(--matrix-green);
-  box-shadow: 0 0 10px rgba(0, 255, 0, 0.3), inset 0 0 10px rgba(0, 255, 0, 0.1);
+.igloo-border {
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.1), inset 0 0 20px rgba(16, 185, 129, 0.05);
 }
 
-.matrix-button {
-  background: rgba(0, 255, 0, 0.1);
-  border: 1px solid var(--matrix-green);
-  color: var(--matrix-green);
-  transition: all 0.3s ease;
-}
-
-.matrix-button:hover {
-  background: var(--matrix-green);
-  color: var(--matrix-dark);
-  box-shadow: 0 0 20px var(--matrix-green);
-  text-shadow: none;
-}
-
-.matrix-card {
-  background: rgba(22, 27, 34, 0.9);
-  border: 1px solid rgba(0, 255, 0, 0.3);
+.igloo-button {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(6, 182, 212, 0.1) 100%);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: var(--igloo-emerald);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   backdrop-filter: blur(10px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 1px rgba(0, 255, 0, 0.5);
+}
+
+.igloo-button:hover {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(6, 182, 212, 0.2) 100%);
+  border-color: var(--igloo-emerald);
+  box-shadow: 0 0 30px rgba(16, 185, 129, 0.4);
+  transform: translateY(-1px);
+}
+
+.igloo-card {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(51, 65, 85, 0.6) 100%);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  backdrop-filter: blur(20px);
+  box-shadow: 
+    0 20px 25px -5px rgba(0, 0, 0, 0.3),
+    0 10px 10px -5px rgba(0, 0, 0, 0.2),
+    0 0 0 1px rgba(16, 185, 129, 0.1);
 }
 
 .typing-animation::after {
   content: '|';
   animation: blink 1s infinite;
+  color: var(--igloo-emerald);
 }
 
 @keyframes blink {
@@ -72,16 +79,20 @@ body {
 }
 
 .gradient-text {
-  background: linear-gradient(135deg, #00ff00, #00cc88);
+  background: linear-gradient(135deg, #10b981, #06b6d4);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .hover-glow:hover {
-  box-shadow: 0 0 20px rgba(255, 23, 68, 0.6), 0 0 40px rgba(255, 23, 68, 0.3);
-  border-color: #ff1744;
-  color: #ff1744;
+  box-shadow: 
+    0 0 30px rgba(6, 182, 212, 0.4), 
+    0 0 60px rgba(6, 182, 212, 0.2),
+    0 20px 25px -5px rgba(0, 0, 0, 0.3);
+  border-color: #06b6d4;
+  transform: translateY(-2px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .scroll-glow::-webkit-scrollbar {
@@ -90,20 +101,150 @@ body {
 }
 
 .scroll-glow::-webkit-scrollbar-thumb {
-  background: var(--matrix-green);
+  background: linear-gradient(135deg, var(--igloo-emerald), var(--igloo-accent));
   border-radius: 4px;
-  box-shadow: 0 0 10px var(--matrix-green);
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
 }
 
 .pulse-glow {
-  animation: pulse-glow 2s ease-in-out infinite alternate;
+  animation: pulse-glow 3s ease-in-out infinite alternate;
 }
 
 @keyframes pulse-glow {
   from {
-    box-shadow: 0 0 5px rgba(0, 255, 0, 0.4);
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
   }
   to {
-    box-shadow: 0 0 20px rgba(0, 255, 0, 0.8);
+    box-shadow: 0 0 40px rgba(16, 185, 129, 0.6), 0 0 80px rgba(6, 182, 212, 0.3);
+  }
+}
+
+/* Smooth transitions for all interactive elements */
+button, input, select, textarea {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Enhanced focus states */
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--igloo-emerald);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1), 0 0 20px rgba(16, 185, 129, 0.2);
+}
+
+/* Improved table styling */
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+th, td {
+  border-bottom: 1px solid rgba(16, 185, 129, 0.1);
+}
+
+tr:hover {
+  background: rgba(16, 185, 129, 0.05);
+}
+
+/* Enhanced card hover effects */
+.igloo-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(16, 185, 129, 0.2),
+    0 0 30px rgba(16, 185, 129, 0.1);
+}
+
+/* Glassmorphism effect for modals */
+.modal-backdrop {
+  backdrop-filter: blur(8px);
+  background: rgba(15, 23, 42, 0.8);
+}
+
+/* Improved form styling */
+.form-group {
+  position: relative;
+}
+
+.form-group input:focus + label,
+.form-group input:not(:placeholder-shown) + label {
+  transform: translateY(-1.5rem) scale(0.875);
+  color: var(--igloo-emerald);
+}
+
+/* Custom scrollbar for better UX */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(16, 185, 129, 0.5) transparent;
+}
+
+/* Loading states */
+.loading {
+  position: relative;
+  overflow: hidden;
+}
+
+.loading::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.2), transparent);
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+/* Enhanced button states */
+.igloo-button:active {
+  transform: translateY(0);
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+}
+
+.igloo-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Improved spacing and typography */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+p {
+  line-height: 1.6;
+}
+
+/* Enhanced animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* Responsive improvements */
+@media (max-width: 768px) {
+  .igloo-card {
+    margin: 0.5rem;
+  }
+  
+  .hover-glow:hover {
+    transform: none;
   }
 }

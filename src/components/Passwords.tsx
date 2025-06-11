@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, Eye, EyeOff, Copy, Edit, Trash2, Shield, AlertTriangle, Key, Lock } from 'lucide-react';
+import { Plus, Eye, EyeOff, Copy, Edit, Trash2, Shield, AlertTriangle, Key, Lock, Check, X } from 'lucide-react';
 
 interface BankCredential {
   id: string;
@@ -36,6 +36,13 @@ const Passwords: React.FC = () => {
   const [showAddForm, setShowAddForm] = useState(false);
   const [visiblePasswords, setVisiblePasswords] = useState<{ [key: string]: boolean }>({});
   const [editingCredential, setEditingCredential] = useState<string | null>(null);
+  const [editFormData, setEditFormData] = useState({
+    bankName: '',
+    username: '',
+    password: '',
+    notes: '',
+    website: ''
+  });
   const [newCredential, setNewCredential] = useState({
     bankName: '',
     username: '',
@@ -68,6 +75,48 @@ const Passwords: React.FC = () => {
     }
   };
 
+  const startEdit = (credential: BankCredential) => {
+    setEditingCredential(credential.id);
+    setEditFormData({
+      bankName: credential.bankName,
+      username: credential.username,
+      password: credential.password,
+      notes: credential.notes,
+      website: credential.website || ''
+    });
+  };
+
+  const handleEditSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (editingCredential && editFormData.bankName && editFormData.username && editFormData.password) {
+      setCredentials(prev => prev.map(cred => 
+        cred.id === editingCredential 
+          ? {
+              ...cred,
+              bankName: editFormData.bankName,
+              username: editFormData.username,
+              password: editFormData.password,
+              notes: editFormData.notes,
+              website: editFormData.website,
+              lastUpdated: new Date().toISOString().split('T')[0]
+            }
+          : cred
+      ));
+      setEditingCredential(null);
+    }
+  };
+
+  const cancelEdit = () => {
+    setEditingCredential(null);
+    setEditFormData({
+      bankName: '',
+      username: '',
+      password: '',
+      notes: '',
+      website: ''
+    });
+  };
+
   const togglePasswordVisibility = (id: string) => {
     setVisiblePasswords(prev => ({
       ...prev,
@@ -85,7 +134,9 @@ const Passwords: React.FC = () => {
   };
 
   const deleteCredential = (id: string) => {
-    setCredentials(credentials.filter(cred => cred.id !== id));
+    if (confirm('Are you sure you want to delete this credential?')) {
+      setCredentials(credentials.filter(cred => cred.id !== id));
+    }
   };
 
   const generatePassword = () => {
@@ -94,7 +145,11 @@ const Passwords: React.FC = () => {
     for (let i = 0; i < 16; i++) {
       password += chars.charAt(Math.floor(Math.random() * chars.length));
     }
-    setNewCredential({ ...newCredential, password });
+    if (editingCredential) {
+      setEditFormData({ ...editFormData, password });
+    } else {
+      setNewCredential({ ...newCredential, password });
+    }
   };
 
   const getPasswordStrength = (password: string) => {
@@ -108,22 +163,22 @@ const Passwords: React.FC = () => {
 
     if (strength <= 2) return { level: 'Weak', color: 'text-red-400', bgColor: 'bg-red-400' };
     if (strength <= 4) return { level: 'Medium', color: 'text-yellow-400', bgColor: 'bg-yellow-400' };
-    return { level: 'Strong', color: 'text-green-400', bgColor: 'bg-green-400' };
+    return { level: 'Strong', color: 'text-emerald-400', bgColor: 'bg-emerald-400' };
   };
 
   return (
     <div className="p-6 ml-64">
       <div className="mb-8">
-        <h1 className="text-4xl font-bold matrix-glow mb-2 typing-animation">
+        <h1 className="text-4xl font-bold igloo-glow mb-2 typing-animation">
           Bank Passwords
         </h1>
-        <p className="text-green-400/70 text-lg">
+        <p className="text-emerald-400/70 text-lg">
           Securely store your banking credentials
         </p>
       </div>
 
       {/* Security Warning */}
-      <div className="bg-yellow-900/20 border border-yellow-400/30 rounded-lg p-4 mb-8 flex items-start space-x-3">
+      <div className="bg-yellow-900/20 border border-yellow-400/30 rounded-2xl p-4 mb-8 flex items-start space-x-3">
         <AlertTriangle className="text-yellow-400 mt-1 flex-shrink-0" size={20} />
         <div>
           <h3 className="text-yellow-400 font-semibold mb-1">Security Notice</h3>
@@ -135,32 +190,32 @@ const Passwords: React.FC = () => {
 
       {/* Summary Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div className="matrix-card p-6 rounded-lg hover-glow transition-all duration-300">
+        <div className="igloo-card p-6 rounded-2xl hover-glow transition-all duration-300">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-green-400/70 text-sm mb-1">Total Accounts</p>
-              <p className="text-2xl font-bold matrix-glow">{credentials.length}</p>
+              <p className="text-emerald-400/70 text-sm mb-1">Total Accounts</p>
+              <p className="text-2xl font-bold igloo-glow">{credentials.length}</p>
             </div>
-            <Shield className="text-green-400 opacity-60" size={24} />
+            <Shield className="text-emerald-400 opacity-60" size={24} />
           </div>
         </div>
 
-        <div className="matrix-card p-6 rounded-lg hover-glow transition-all duration-300">
+        <div className="igloo-card p-6 rounded-2xl hover-glow transition-all duration-300">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-green-400/70 text-sm mb-1">Strong Passwords</p>
-              <p className="text-2xl font-bold text-green-400">
+              <p className="text-emerald-400/70 text-sm mb-1">Strong Passwords</p>
+              <p className="text-2xl font-bold text-emerald-400">
                 {credentials.filter(cred => getPasswordStrength(cred.password).level === 'Strong').length}
               </p>
             </div>
-            <Key className="text-green-400 opacity-60" size={24} />
+            <Key className="text-emerald-400 opacity-60" size={24} />
           </div>
         </div>
 
-        <div className="matrix-card p-6 rounded-lg hover-glow transition-all duration-300">
+        <div className="igloo-card p-6 rounded-2xl hover-glow transition-all duration-300">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-green-400/70 text-sm mb-1">Weak Passwords</p>
+              <p className="text-emerald-400/70 text-sm mb-1">Weak Passwords</p>
               <p className="text-2xl font-bold text-red-400">
                 {credentials.filter(cred => getPasswordStrength(cred.password).level === 'Weak').length}
               </p>
@@ -169,11 +224,11 @@ const Passwords: React.FC = () => {
           </div>
         </div>
 
-        <div className="matrix-card p-6 rounded-lg hover-glow transition-all duration-300">
+        <div className="igloo-card p-6 rounded-2xl hover-glow transition-all duration-300">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-green-400/70 text-sm mb-1">Last Updated</p>
-              <p className="text-lg font-bold matrix-glow">
+              <p className="text-emerald-400/70 text-sm mb-1">Last Updated</p>
+              <p className="text-lg font-bold igloo-glow">
                 {credentials.length > 0 
                   ? Math.max(...credentials.map(c => new Date(c.lastUpdated).getTime())) > Date.now() - 30*24*60*60*1000 
                     ? 'Recent' 
@@ -182,7 +237,7 @@ const Passwords: React.FC = () => {
                 }
               </p>
             </div>
-            <Lock className="text-green-400 opacity-60" size={24} />
+            <Lock className="text-emerald-400 opacity-60" size={24} />
           </div>
         </div>
       </div>
@@ -191,7 +246,7 @@ const Passwords: React.FC = () => {
       <div className="mb-8">
         <button
           onClick={() => setShowAddForm(!showAddForm)}
-          className="matrix-button px-6 py-3 rounded-lg hover-glow flex items-center space-x-2"
+          className="igloo-button px-6 py-3 rounded-xl hover-glow flex items-center space-x-2"
         >
           <Plus size={20} />
           <span>Add Bank Credentials</span>
@@ -200,8 +255,8 @@ const Passwords: React.FC = () => {
 
       {/* Add Credential Form */}
       {showAddForm && (
-        <div className="matrix-card p-6 rounded-lg mb-8">
-          <h3 className="text-xl font-semibold matrix-glow mb-4">Add Bank Credentials</h3>
+        <div className="igloo-card p-6 rounded-2xl mb-8">
+          <h3 className="text-xl font-semibold igloo-glow mb-4">Add Bank Credentials</h3>
           <form onSubmit={handleAddCredential} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <input
@@ -209,7 +264,7 @@ const Passwords: React.FC = () => {
                 placeholder="Bank Name (e.g., Chase Bank)"
                 value={newCredential.bankName}
                 onChange={(e) => setNewCredential({ ...newCredential, bankName: e.target.value })}
-                className="p-3 bg-gray-800/50 matrix-border rounded-lg text-green-400 placeholder-green-400/50 focus:outline-none focus:ring-2 focus:ring-green-400/50"
+                className="p-3 bg-slate-800/50 igloo-border rounded-xl text-emerald-400 placeholder-emerald-400/50 focus:outline-none focus:ring-2 focus:ring-emerald-400/50"
                 required
               />
               <input
@@ -217,7 +272,7 @@ const Passwords: React.FC = () => {
                 placeholder="Website (optional)"
                 value={newCredential.website}
                 onChange={(e) => setNewCredential({ ...newCredential, website: e.target.value })}
-                className="p-3 bg-gray-800/50 matrix-border rounded-lg text-green-400 placeholder-green-400/50 focus:outline-none focus:ring-2 focus:ring-green-400/50"
+                className="p-3 bg-slate-800/50 igloo-border rounded-xl text-emerald-400 placeholder-emerald-400/50 focus:outline-none focus:ring-2 focus:ring-emerald-400/50"
               />
             </div>
             
@@ -226,7 +281,7 @@ const Passwords: React.FC = () => {
               placeholder="Username/Email"
               value={newCredential.username}
               onChange={(e) => setNewCredential({ ...newCredential, username: e.target.value })}
-              className="w-full p-3 bg-gray-800/50 matrix-border rounded-lg text-green-400 placeholder-green-400/50 focus:outline-none focus:ring-2 focus:ring-green-400/50"
+              className="w-full p-3 bg-slate-800/50 igloo-border rounded-xl text-emerald-400 placeholder-emerald-400/50 focus:outline-none focus:ring-2 focus:ring-emerald-400/50"
               required
             />
             
@@ -236,13 +291,13 @@ const Passwords: React.FC = () => {
                 placeholder="Password"
                 value={newCredential.password}
                 onChange={(e) => setNewCredential({ ...newCredential, password: e.target.value })}
-                className="w-full p-3 pr-24 bg-gray-800/50 matrix-border rounded-lg text-green-400 placeholder-green-400/50 focus:outline-none focus:ring-2 focus:ring-green-400/50"
+                className="w-full p-3 pr-24 bg-slate-800/50 igloo-border rounded-xl text-emerald-400 placeholder-emerald-400/50 focus:outline-none focus:ring-2 focus:ring-emerald-400/50"
                 required
               />
               <button
                 type="button"
                 onClick={generatePassword}
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 px-3 py-1 text-xs matrix-button rounded hover-glow"
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 px-3 py-1 text-xs igloo-button rounded hover-glow"
               >
                 Generate
               </button>
@@ -250,9 +305,9 @@ const Passwords: React.FC = () => {
 
             {newCredential.password && (
               <div className="flex items-center space-x-4">
-                <span className="text-sm text-green-400/70">Password Strength:</span>
+                <span className="text-sm text-emerald-400/70">Password Strength:</span>
                 <div className="flex items-center space-x-2">
-                  <div className={`px-2 py-1 rounded text-xs font-semibold ${getPasswordStrength(newCredential.password).color} bg-gray-800/50`}>
+                  <div className={`px-2 py-1 rounded text-xs font-semibold ${getPasswordStrength(newCredential.password).color} bg-slate-800/50`}>
                     {getPasswordStrength(newCredential.password).level}
                   </div>
                 </div>
@@ -263,20 +318,20 @@ const Passwords: React.FC = () => {
               placeholder="Notes (Optional) - Security questions, account details, etc."
               value={newCredential.notes}
               onChange={(e) => setNewCredential({ ...newCredential, notes: e.target.value })}
-              className="w-full p-3 bg-gray-800/50 matrix-border rounded-lg text-green-400 placeholder-green-400/50 focus:outline-none focus:ring-2 focus:ring-green-400/50 h-24 resize-none"
+              className="w-full p-3 bg-slate-800/50 igloo-border rounded-xl text-emerald-400 placeholder-emerald-400/50 focus:outline-none focus:ring-2 focus:ring-emerald-400/50 h-24 resize-none"
             />
             
             <div className="flex space-x-4">
               <button
                 type="submit"
-                className="flex-1 matrix-button py-3 rounded-lg hover-glow font-semibold"
+                className="flex-1 igloo-button py-3 rounded-xl hover-glow font-semibold"
               >
                 Save Credentials
               </button>
               <button
                 type="button"
                 onClick={() => setShowAddForm(false)}
-                className="flex-1 px-6 py-3 bg-gray-700 text-gray-300 rounded-lg hover:bg-gray-600 transition-colors"
+                className="flex-1 px-6 py-3 bg-slate-700 text-slate-300 rounded-xl hover:bg-slate-600 transition-colors"
               >
                 Cancel
               </button>
@@ -290,93 +345,171 @@ const Passwords: React.FC = () => {
         {credentials.map((credential) => {
           const passwordStrength = getPasswordStrength(credential.password);
           const isVisible = visiblePasswords[credential.id];
+          const isEditing = editingCredential === credential.id;
 
           return (
-            <div key={credential.id} className="matrix-card p-6 rounded-lg hover-glow transition-all duration-300">
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex items-center space-x-3">
-                  <div className="w-12 h-12 bg-green-400/10 rounded-lg flex items-center justify-center">
-                    <Shield className="text-green-400" size={24} />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-green-400">{credential.bankName}</h3>
-                    {credential.website && (
-                      <p className="text-sm text-green-400/60">{credential.website}</p>
-                    )}
-                    <div className="flex items-center space-x-2 mt-1">
-                      <div className={`px-2 py-1 rounded text-xs font-semibold ${passwordStrength.color} bg-gray-800/50`}>
-                        {passwordStrength.level}
-                      </div>
-                      <span className="text-xs text-green-400/50">
-                        Updated: {credential.lastUpdated}
-                      </span>
+            <div key={credential.id} className="igloo-card p-6 rounded-2xl hover-glow transition-all duration-300">
+              {isEditing ? (
+                <form onSubmit={handleEditSubmit} className="space-y-4">
+                  <div className="flex items-start justify-between mb-4">
+                    <h3 className="text-lg font-semibold text-emerald-400">Edit Credentials</h3>
+                    <div className="flex space-x-2">
+                      <button
+                        type="submit"
+                        className="p-2 text-emerald-400/70 hover:text-emerald-400 hover:bg-emerald-400/10 rounded-xl transition-colors"
+                      >
+                        <Check size={16} />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={cancelEdit}
+                        className="p-2 text-slate-400/70 hover:text-slate-400 hover:bg-slate-400/10 rounded-xl transition-colors"
+                      >
+                        <X size={16} />
+                      </button>
                     </div>
                   </div>
-                </div>
-                
-                <div className="flex space-x-2">
-                  <button
-                    onClick={() => setEditingCredential(editingCredential === credential.id ? null : credential.id)}
-                    className="p-2 text-green-400/70 hover:text-green-400 hover:bg-green-400/10 rounded-lg transition-colors"
-                  >
-                    <Edit size={16} />
-                  </button>
-                  <button
-                    onClick={() => deleteCredential(credential.id)}
-                    className="p-2 text-red-400/70 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"
-                  >
-                    <Trash2 size={16} />
-                  </button>
-                </div>
-              </div>
 
-              <div className="space-y-4">
-                {/* Username */}
-                <div className="flex items-center justify-between p-3 bg-gray-800/30 rounded-lg">
-                  <div>
-                    <p className="text-sm text-green-400/70 mb-1">Username/Email</p>
-                    <p className="font-mono text-green-400">{credential.username}</p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <input
+                      type="text"
+                      placeholder="Bank Name"
+                      value={editFormData.bankName}
+                      onChange={(e) => setEditFormData({ ...editFormData, bankName: e.target.value })}
+                      className="p-3 bg-slate-800/50 igloo-border rounded-xl text-emerald-400 placeholder-emerald-400/50 focus:outline-none focus:ring-2 focus:ring-emerald-400/50"
+                      required
+                    />
+                    <input
+                      type="text"
+                      placeholder="Website"
+                      value={editFormData.website}
+                      onChange={(e) => setEditFormData({ ...editFormData, website: e.target.value })}
+                      className="p-3 bg-slate-800/50 igloo-border rounded-xl text-emerald-400 placeholder-emerald-400/50 focus:outline-none focus:ring-2 focus:ring-emerald-400/50"
+                    />
                   </div>
-                  <button
-                    onClick={() => copyToClipboard(credential.username, 'username')}
-                    className="p-2 text-green-400/70 hover:text-green-400 hover:bg-green-400/10 rounded-lg transition-colors"
-                  >
-                    <Copy size={16} />
-                  </button>
-                </div>
 
-                {/* Password */}
-                <div className="flex items-center justify-between p-3 bg-gray-800/30 rounded-lg">
-                  <div className="flex-1">
-                    <p className="text-sm text-green-400/70 mb-1">Password</p>
-                    <p className="font-mono text-green-400">
-                      {isVisible ? credential.password : '••••••••••••••••'}
-                    </p>
-                  </div>
-                  <div className="flex space-x-2">
+                  <input
+                    type="text"
+                    placeholder="Username/Email"
+                    value={editFormData.username}
+                    onChange={(e) => setEditFormData({ ...editFormData, username: e.target.value })}
+                    className="w-full p-3 bg-slate-800/50 igloo-border rounded-xl text-emerald-400 placeholder-emerald-400/50 focus:outline-none focus:ring-2 focus:ring-emerald-400/50"
+                    required
+                  />
+
+                  <div className="relative">
+                    <input
+                      type="password"
+                      placeholder="Password"
+                      value={editFormData.password}
+                      onChange={(e) => setEditFormData({ ...editFormData, password: e.target.value })}
+                      className="w-full p-3 pr-24 bg-slate-800/50 igloo-border rounded-xl text-emerald-400 placeholder-emerald-400/50 focus:outline-none focus:ring-2 focus:ring-emerald-400/50"
+                      required
+                    />
                     <button
-                      onClick={() => togglePasswordVisibility(credential.id)}
-                      className="p-2 text-green-400/70 hover:text-green-400 hover:bg-green-400/10 rounded-lg transition-colors"
+                      type="button"
+                      onClick={generatePassword}
+                      className="absolute right-2 top-1/2 transform -translate-y-1/2 px-3 py-1 text-xs igloo-button rounded hover-glow"
                     >
-                      {isVisible ? <EyeOff size={16} /> : <Eye size={16} />}
-                    </button>
-                    <button
-                      onClick={() => copyToClipboard(credential.password, 'password')}
-                      className="p-2 text-green-400/70 hover:text-green-400 hover:bg-green-400/10 rounded-lg transition-colors"
-                    >
-                      <Copy size={16} />
+                      Generate
                     </button>
                   </div>
-                </div>
 
-                {/* Notes */}
-                {credential.notes && (
-                  <div className="p-3 bg-gray-800/30 rounded-lg">
-                    <p className="text-sm text-green-400/70 mb-1">Notes</p>
-                    <p className="text-green-400 text-sm">{credential.notes}</p>
+                  <textarea
+                    placeholder="Notes"
+                    value={editFormData.notes}
+                    onChange={(e) => setEditFormData({ ...editFormData, notes: e.target.value })}
+                    className="w-full p-3 bg-slate-800/50 igloo-border rounded-xl text-emerald-400 placeholder-emerald-400/50 focus:outline-none focus:ring-2 focus:ring-emerald-400/50 h-20 resize-none"
+                  />
+                </form>
+              ) : (
+                <>
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-12 h-12 bg-emerald-400/10 rounded-xl flex items-center justify-center">
+                        <Shield className="text-emerald-400" size={24} />
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-semibold text-emerald-400">{credential.bankName}</h3>
+                        {credential.website && (
+                          <p className="text-sm text-emerald-400/60">{credential.website}</p>
+                        )}
+                        <div className="flex items-center space-x-2 mt-1">
+                          <div className={`px-2 py-1 rounded text-xs font-semibold ${passwordStrength.color} bg-slate-800/50`}>
+                            {passwordStrength.level}
+                          </div>
+                          <span className="text-xs text-emerald-400/50">
+                            Updated: {credential.lastUpdated}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="flex space-x-2">
+                      <button
+                        onClick={() => startEdit(credential)}
+                        className="p-2 text-emerald-400/70 hover:text-emerald-400 hover:bg-emerald-400/10 rounded-xl transition-colors"
+                      >
+                        <Edit size={16} />
+                      </button>
+                      <button
+                        onClick={() => deleteCredential(credential.id)}
+                        className="p-2 text-red-400/70 hover:text-red-400 hover:bg-red-400/10 rounded-xl transition-colors"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
                   </div>
-                )}
-              </div>
+
+                  <div className="space-y-4">
+                    {/* Username */}
+                    <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-xl">
+                      <div>
+                        <p className="text-sm text-emerald-400/70 mb-1">Username/Email</p>
+                        <p className="font-mono text-emerald-400">{credential.username}</p>
+                      </div>
+                      <button
+                        onClick={() => copyToClipboard(credential.username, 'username')}
+                        className="p-2 text-emerald-400/70 hover:text-emerald-400 hover:bg-emerald-400/10 rounded-xl transition-colors"
+                      >
+                        <Copy size={16} />
+                      </button>
+                    </div>
+
+                    {/* Password */}
+                    <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-xl">
+                      <div className="flex-1">
+                        <p className="text-sm text-emerald-400/70 mb-1">Password</p>
+                        <p className="font-mono text-emerald-400">
+                          {isVisible ? credential.password : '••••••••••••••••'}
+                        </p>
+                      </div>
+                      <div className="flex space-x-2">
+                        <button
+                          onClick={() => togglePasswordVisibility(credential.id)}
+                          className="p-2 text-emerald-400/70 hover:text-emerald-400 hover:bg-emerald-400/10 rounded-xl transition-colors"
+                        >
+                          {isVisible ? <EyeOff size={16} /> : <Eye size={16} />}
+                        </button>
+                        <button
+                          onClick={() => copyToClipboard(credential.password, 'password')}
+                          className="p-2 text-emerald-400/70 hover:text-emerald-400 hover:bg-emerald-400/10 rounded-xl transition-colors"
+                        >
+                          <Copy size={16} />
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Notes */}
+                    {credential.notes && (
+                      <div className="p-3 bg-slate-800/30 rounded-xl">
+                        <p className="text-sm text-emerald-400/70 mb-1">Notes</p>
+                        <p className="text-emerald-400 text-sm">{credential.notes}</p>
+                      </div>
+                    )}
+                  </div>
+                </>
+              )}
             </div>
           );
         })}
@@ -384,15 +517,15 @@ const Passwords: React.FC = () => {
 
       {/* Empty State */}
       {credentials.length === 0 && !showAddForm && (
-        <div className="matrix-card p-12 rounded-lg text-center">
-          <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-green-400/10 flex items-center justify-center">
-            <Lock className="text-green-400 opacity-40" size={32} />
+        <div className="igloo-card p-12 rounded-2xl text-center">
+          <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-emerald-400/10 flex items-center justify-center">
+            <Lock className="text-emerald-400 opacity-40" size={32} />
           </div>
-          <h3 className="text-xl font-semibold matrix-glow mb-2">No bank credentials saved yet</h3>
-          <p className="text-green-400/60 mb-6">Add your first bank credentials to start organizing!</p>
+          <h3 className="text-xl font-semibold igloo-glow mb-2">No bank credentials saved yet</h3>
+          <p className="text-emerald-400/60 mb-6">Add your first bank credentials to start organizing!</p>
           <button
             onClick={() => setShowAddForm(true)}
-            className="matrix-button px-6 py-3 rounded-lg hover-glow"
+            className="igloo-button px-6 py-3 rounded-xl hover-glow"
           >
             Add First Credentials
           </button>
@@ -400,22 +533,22 @@ const Passwords: React.FC = () => {
       )}
 
       {/* Security Tips */}
-      <div className="matrix-card p-6 rounded-lg mt-8">
-        <h3 className="text-xl font-semibold matrix-glow mb-4">Security Best Practices</h3>
+      <div className="igloo-card p-6 rounded-2xl mt-8">
+        <h3 className="text-xl font-semibold igloo-glow mb-4">Security Best Practices</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-3">
             <div className="flex items-start space-x-3">
-              <Shield className="text-green-400 mt-1 flex-shrink-0" size={16} />
+              <Shield className="text-emerald-400 mt-1 flex-shrink-0" size={16} />
               <div>
-                <h4 className="font-semibold text-green-400 text-sm">Use Strong Passwords</h4>
-                <p className="text-green-400/70 text-xs">At least 12 characters with mixed case, numbers, and symbols</p>
+                <h4 className="font-semibold text-emerald-400 text-sm">Use Strong Passwords</h4>
+                <p className="text-emerald-400/70 text-xs">At least 12 characters with mixed case, numbers, and symbols</p>
               </div>
             </div>
             <div className="flex items-start space-x-3">
-              <Key className="text-green-400 mt-1 flex-shrink-0" size={16} />
+              <Key className="text-emerald-400 mt-1 flex-shrink-0" size={16} />
               <div>
-                <h4 className="font-semibold text-green-400 text-sm">Enable 2FA</h4>
-                <p className="text-green-400/70 text-xs">Always enable two-factor authentication when available</p>
+                <h4 className="font-semibold text-emerald-400 text-sm">Enable 2FA</h4>
+                <p className="text-emerald-400/70 text-xs">Always enable two-factor authentication when available</p>
               </div>
             </div>
           </div>
@@ -424,14 +557,14 @@ const Passwords: React.FC = () => {
               <AlertTriangle className="text-yellow-400 mt-1 flex-shrink-0" size={16} />
               <div>
                 <h4 className="font-semibold text-yellow-400 text-sm">Regular Updates</h4>
-                <p className="text-green-400/70 text-xs">Update passwords regularly, especially after security breaches</p>
+                <p className="text-emerald-400/70 text-xs">Update passwords regularly, especially after security breaches</p>
               </div>
             </div>
             <div className="flex items-start space-x-3">
-              <Lock className="text-green-400 mt-1 flex-shrink-0" size={16} />
+              <Lock className="text-emerald-400 mt-1 flex-shrink-0" size={16} />
               <div>
-                <h4 className="font-semibold text-green-400 text-sm">Secure Storage</h4>
-                <p className="text-green-400/70 text-xs">Consider using dedicated password managers for maximum security</p>
+                <h4 className="font-semibold text-emerald-400 text-sm">Secure Storage</h4>
+                <p className="text-emerald-400/70 text-xs">Consider using dedicated password managers for maximum security</p>
               </div>
             </div>
           </div>
