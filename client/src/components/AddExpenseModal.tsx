@@ -7,7 +7,7 @@ interface AddExpenseModalProps {
 }
 
 const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ onClose }) => {
-  const { addExpense, categories, cards } = useContext(ExpenseContext);
+  const { addExpense, categories, cards, selectedCountry } = useContext(ExpenseContext);
   const [formData, setFormData] = useState({
     description: '',
     amount: '',
@@ -41,6 +41,10 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ onClose }) => {
   const selectedCard = cards.find(card => card.id === formData.cardId);
   const expenseAmount = parseFloat(formData.amount) || 0;
   const hasInsufficientFunds = selectedCard && expenseAmount > selectedCard.balance;
+
+  const formatCurrency = (amount: number) => {
+    return `${selectedCountry.currency.symbol}${amount.toFixed(2)}`;
+  };
 
   return (
     <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50">
@@ -114,7 +118,7 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ onClose }) => {
               <option value="">Select card (optional)</option>
               {cards.map(card => (
                 <option key={card.id} value={card.id}>
-                  {card.name} - ${card.balance.toFixed(2)}
+                  {card.name} - {formatCurrency(card.balance)}
                 </option>
               ))}
             </select>
@@ -134,7 +138,7 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ onClose }) => {
                 <span className="text-cyan-400 font-semibold" style={{
                   textShadow: '0 0 10px rgba(0, 255, 255, 0.5)'
                 }}>
-                  ${(selectedCard.balance - expenseAmount).toFixed(2)}
+                  {formatCurrency(selectedCard.balance - expenseAmount)}
                 </span>
               </div>
             </div>

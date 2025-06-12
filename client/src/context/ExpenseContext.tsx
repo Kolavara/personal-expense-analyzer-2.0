@@ -24,11 +24,24 @@ export interface Card {
   color: string;
 }
 
+export interface Country {
+  code: string;
+  name: string;
+  flag: string;
+  currency: {
+    symbol: string;
+    code: string;
+    name: string;
+  };
+}
+
 interface ExpenseContextType {
   expenses: Expense[];
   categories: Category[];
   cards: Card[];
   totalExpenses: number;
+  selectedCountry: Country;
+  countries: Country[];
   addExpense: (expense: Expense) => void;
   deleteExpense: (id: string) => void;
   updateExpense: (id: string, expense: Partial<Expense>) => void;
@@ -36,13 +49,71 @@ interface ExpenseContextType {
   updateCard: (id: string, card: Partial<Card>) => void;
   deleteCard: (id: string) => void;
   deductFromCard: (cardId: string, amount: number) => void;
+  setSelectedCountry: (country: Country) => void;
 }
+
+const defaultCountries: Country[] = [
+  { code: 'US', name: 'United States', flag: '🇺🇸', currency: { symbol: '$', code: 'USD', name: 'US Dollar' } },
+  { code: 'GB', name: 'United Kingdom', flag: '🇬🇧', currency: { symbol: '£', code: 'GBP', name: 'British Pound' } },
+  { code: 'EU', name: 'European Union', flag: '🇪🇺', currency: { symbol: '€', code: 'EUR', name: 'Euro' } },
+  { code: 'CA', name: 'Canada', flag: '🇨🇦', currency: { symbol: 'C$', code: 'CAD', name: 'Canadian Dollar' } },
+  { code: 'AU', name: 'Australia', flag: '🇦🇺', currency: { symbol: 'A$', code: 'AUD', name: 'Australian Dollar' } },
+  { code: 'JP', name: 'Japan', flag: '🇯🇵', currency: { symbol: '¥', code: 'JPY', name: 'Japanese Yen' } },
+  { code: 'CN', name: 'China', flag: '🇨🇳', currency: { symbol: '¥', code: 'CNY', name: 'Chinese Yuan' } },
+  { code: 'IN', name: 'India', flag: '🇮🇳', currency: { symbol: '₹', code: 'INR', name: 'Indian Rupee' } },
+  { code: 'KR', name: 'South Korea', flag: '🇰🇷', currency: { symbol: '₩', code: 'KRW', name: 'South Korean Won' } },
+  { code: 'SG', name: 'Singapore', flag: '🇸🇬', currency: { symbol: 'S$', code: 'SGD', name: 'Singapore Dollar' } },
+  { code: 'HK', name: 'Hong Kong', flag: '🇭🇰', currency: { symbol: 'HK$', code: 'HKD', name: 'Hong Kong Dollar' } },
+  { code: 'CH', name: 'Switzerland', flag: '🇨🇭', currency: { symbol: 'CHF', code: 'CHF', name: 'Swiss Franc' } },
+  { code: 'NO', name: 'Norway', flag: '🇳🇴', currency: { symbol: 'kr', code: 'NOK', name: 'Norwegian Krone' } },
+  { code: 'SE', name: 'Sweden', flag: '🇸🇪', currency: { symbol: 'kr', code: 'SEK', name: 'Swedish Krona' } },
+  { code: 'DK', name: 'Denmark', flag: '🇩🇰', currency: { symbol: 'kr', code: 'DKK', name: 'Danish Krone' } },
+  { code: 'NZ', name: 'New Zealand', flag: '🇳🇿', currency: { symbol: 'NZ$', code: 'NZD', name: 'New Zealand Dollar' } },
+  { code: 'MX', name: 'Mexico', flag: '🇲🇽', currency: { symbol: '$', code: 'MXN', name: 'Mexican Peso' } },
+  { code: 'BR', name: 'Brazil', flag: '🇧🇷', currency: { symbol: 'R$', code: 'BRL', name: 'Brazilian Real' } },
+  { code: 'AR', name: 'Argentina', flag: '🇦🇷', currency: { symbol: '$', code: 'ARS', name: 'Argentine Peso' } },
+  { code: 'CL', name: 'Chile', flag: '🇨🇱', currency: { symbol: '$', code: 'CLP', name: 'Chilean Peso' } },
+  { code: 'CO', name: 'Colombia', flag: '🇨🇴', currency: { symbol: '$', code: 'COP', name: 'Colombian Peso' } },
+  { code: 'PE', name: 'Peru', flag: '🇵🇪', currency: { symbol: 'S/', code: 'PEN', name: 'Peruvian Sol' } },
+  { code: 'ZA', name: 'South Africa', flag: '🇿🇦', currency: { symbol: 'R', code: 'ZAR', name: 'South African Rand' } },
+  { code: 'EG', name: 'Egypt', flag: '🇪🇬', currency: { symbol: '£', code: 'EGP', name: 'Egyptian Pound' } },
+  { code: 'NG', name: 'Nigeria', flag: '🇳🇬', currency: { symbol: '₦', code: 'NGN', name: 'Nigerian Naira' } },
+  { code: 'KE', name: 'Kenya', flag: '🇰🇪', currency: { symbol: 'KSh', code: 'KES', name: 'Kenyan Shilling' } },
+  { code: 'MA', name: 'Morocco', flag: '🇲🇦', currency: { symbol: 'MAD', code: 'MAD', name: 'Moroccan Dirham' } },
+  { code: 'TN', name: 'Tunisia', flag: '🇹🇳', currency: { symbol: 'د.ت', code: 'TND', name: 'Tunisian Dinar' } },
+  { code: 'RU', name: 'Russia', flag: '🇷🇺', currency: { symbol: '₽', code: 'RUB', name: 'Russian Ruble' } },
+  { code: 'TR', name: 'Turkey', flag: '🇹🇷', currency: { symbol: '₺', code: 'TRY', name: 'Turkish Lira' } },
+  { code: 'SA', name: 'Saudi Arabia', flag: '🇸🇦', currency: { symbol: '﷼', code: 'SAR', name: 'Saudi Riyal' } },
+  { code: 'AE', name: 'UAE', flag: '🇦🇪', currency: { symbol: 'د.إ', code: 'AED', name: 'UAE Dirham' } },
+  { code: 'QA', name: 'Qatar', flag: '🇶🇦', currency: { symbol: '﷼', code: 'QAR', name: 'Qatari Riyal' } },
+  { code: 'KW', name: 'Kuwait', flag: '🇰🇼', currency: { symbol: 'د.ك', code: 'KWD', name: 'Kuwaiti Dinar' } },
+  { code: 'BH', name: 'Bahrain', flag: '🇧🇭', currency: { symbol: '.د.ب', code: 'BHD', name: 'Bahraini Dinar' } },
+  { code: 'OM', name: 'Oman', flag: '🇴🇲', currency: { symbol: '﷼', code: 'OMR', name: 'Omani Rial' } },
+  { code: 'IL', name: 'Israel', flag: '🇮🇱', currency: { symbol: '₪', code: 'ILS', name: 'Israeli Shekel' } },
+  { code: 'TH', name: 'Thailand', flag: '🇹🇭', currency: { symbol: '฿', code: 'THB', name: 'Thai Baht' } },
+  { code: 'VN', name: 'Vietnam', flag: '🇻🇳', currency: { symbol: '₫', code: 'VND', name: 'Vietnamese Dong' } },
+  { code: 'MY', name: 'Malaysia', flag: '🇲🇾', currency: { symbol: 'RM', code: 'MYR', name: 'Malaysian Ringgit' } },
+  { code: 'ID', name: 'Indonesia', flag: '🇮🇩', currency: { symbol: 'Rp', code: 'IDR', name: 'Indonesian Rupiah' } },
+  { code: 'PH', name: 'Philippines', flag: '🇵🇭', currency: { symbol: '₱', code: 'PHP', name: 'Philippine Peso' } },
+  { code: 'BD', name: 'Bangladesh', flag: '🇧🇩', currency: { symbol: '৳', code: 'BDT', name: 'Bangladeshi Taka' } },
+  { code: 'PK', name: 'Pakistan', flag: '🇵🇰', currency: { symbol: '₨', code: 'PKR', name: 'Pakistani Rupee' } },
+  { code: 'LK', name: 'Sri Lanka', flag: '🇱🇰', currency: { symbol: '₨', code: 'LKR', name: 'Sri Lankan Rupee' } },
+  { code: 'NP', name: 'Nepal', flag: '🇳🇵', currency: { symbol: '₨', code: 'NPR', name: 'Nepalese Rupee' } },
+  { code: 'MM', name: 'Myanmar', flag: '🇲🇲', currency: { symbol: 'K', code: 'MMK', name: 'Myanmar Kyat' } },
+  { code: 'KH', name: 'Cambodia', flag: '🇰🇭', currency: { symbol: '៛', code: 'KHR', name: 'Cambodian Riel' } },
+  { code: 'LA', name: 'Laos', flag: '🇱🇦', currency: { symbol: '₭', code: 'LAK', name: 'Lao Kip' } },
+  { code: 'MN', name: 'Mongolia', flag: '🇲🇳', currency: { symbol: '₮', code: 'MNT', name: 'Mongolian Tugrik' } },
+  { code: 'KZ', name: 'Kazakhstan', flag: '🇰🇿', currency: { symbol: '₸', code: 'KZT', name: 'Kazakhstani Tenge' } },
+  { code: 'UZ', name: 'Uzbekistan', flag: '🇺🇿', currency: { symbol: 'лв', code: 'UZS', name: 'Uzbekistani Som' } }
+];
 
 export const ExpenseContext = createContext<ExpenseContextType>({
   expenses: [],
   categories: [],
   cards: [],
   totalExpenses: 0,
+  selectedCountry: defaultCountries[0],
+  countries: [],
   addExpense: () => {},
   deleteExpense: () => {},
   updateExpense: () => {},
@@ -50,6 +121,7 @@ export const ExpenseContext = createContext<ExpenseContextType>({
   updateCard: () => {},
   deleteCard: () => {},
   deductFromCard: () => {},
+  setSelectedCountry: () => {},
 });
 
 const defaultCategories: Category[] = [
@@ -137,6 +209,7 @@ export const ExpenseProvider: React.FC<ExpenseProviderProps> = ({ children }) =>
   const [expenses, setExpenses] = useState<Expense[]>(sampleExpenses);
   const [categories] = useState<Category[]>(defaultCategories);
   const [cards, setCards] = useState<Card[]>(defaultCards);
+  const [selectedCountry, setSelectedCountry] = useState<Country>(defaultCountries[0]);
 
   const totalExpenses = expenses.reduce((sum, expense) => sum + expense.amount, 0);
 
@@ -224,6 +297,8 @@ export const ExpenseProvider: React.FC<ExpenseProviderProps> = ({ children }) =>
       categories,
       cards,
       totalExpenses,
+      selectedCountry,
+      countries: defaultCountries,
       addExpense,
       deleteExpense,
       updateExpense,
@@ -231,6 +306,7 @@ export const ExpenseProvider: React.FC<ExpenseProviderProps> = ({ children }) =>
       updateCard,
       deleteCard,
       deductFromCard,
+      setSelectedCountry,
     }}>
       {children}
     </ExpenseContext.Provider>

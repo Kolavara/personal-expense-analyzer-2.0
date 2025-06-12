@@ -4,7 +4,7 @@ import { ExpenseContext } from '../context/ExpenseContext';
 import AddExpenseModal from './AddExpenseModal';
 
 const Transactions: React.FC = () => {
-  const { expenses, deleteExpense, updateExpense, categories, cards } = useContext(ExpenseContext);
+  const { expenses, deleteExpense, updateExpense, categories, cards, selectedCountry } = useContext(ExpenseContext);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterCategory, setFilterCategory] = useState('');
   const [showAddModal, setShowAddModal] = useState(false);
@@ -16,6 +16,10 @@ const Transactions: React.FC = () => {
     date: '',
     cardId: ''
   });
+
+  const formatCurrency = (amount: number) => {
+    return `${selectedCountry.currency.symbol}${amount.toFixed(2)}`;
+  };
 
   const filteredExpenses = expenses.filter(expense => {
     const matchesSearch = expense.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -174,7 +178,7 @@ const Transactions: React.FC = () => {
                           <select
                             value={editFormData.cardId}
                             onChange={(e) => setEditFormData({ ...editFormData, cardId: e.target.value })}
-                            className="w-full p-2 bg-slate-800/50 igloo-border rounded-lg text-emerald-400 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400/50"
+                            className="w-full p-2 bg-cyan-400/5 border border-cyan-400/30 rounded-lg text-cyan-300 text-sm focus:outline-none focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-400/25 transition-all"
                           >
                             <option value="">Cash</option>
                             {cards.map(card => (
@@ -190,7 +194,7 @@ const Transactions: React.FC = () => {
                             step="0.01"
                             value={editFormData.amount}
                             onChange={(e) => setEditFormData({ ...editFormData, amount: e.target.value })}
-                            className="w-full p-2 bg-slate-800/50 igloo-border rounded-lg text-emerald-400 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400/50"
+                            className="w-full p-2 bg-cyan-400/5 border border-cyan-400/30 rounded-lg text-cyan-300 text-sm focus:outline-none focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-400/25 transition-all"
                             placeholder="Amount"
                             required
                           />
@@ -199,13 +203,13 @@ const Transactions: React.FC = () => {
                           <div className="flex items-center justify-center space-x-2">
                             <button
                               onClick={handleEditSubmit}
-                              className="p-2 text-emerald-400/70 hover:text-emerald-400 hover:bg-emerald-400/10 rounded-lg transition-colors"
+                              className="p-2 text-cyan-400/70 hover:text-cyan-400 hover:bg-cyan-400/10 rounded-lg transition-colors"
                             >
                               <Check size={16} />
                             </button>
                             <button
                               onClick={cancelEdit}
-                              className="p-2 text-slate-400/70 hover:text-slate-400 hover:bg-slate-400/10 rounded-lg transition-colors"
+                              className="p-2 text-cyan-400/70 hover:text-cyan-400 hover:bg-cyan-400/10 rounded-lg transition-colors"
                             >
                               <X size={16} />
                             </button>
@@ -214,34 +218,34 @@ const Transactions: React.FC = () => {
                       </>
                     ) : (
                       <>
-                        <td className="py-4 px-6 text-emerald-400">
+                        <td className="py-4 px-6 text-cyan-400">
                           <div className="flex items-center space-x-2">
-                            <Calendar size={16} className="text-emerald-400/60" />
+                            <Calendar size={16} className="text-cyan-400/60" />
                             <span>{expense.date}</span>
                           </div>
                         </td>
                         <td className="py-4 px-6">
-                          <div className="font-medium text-emerald-400">{expense.description}</div>
+                          <div className="font-medium text-cyan-400">{expense.description}</div>
                         </td>
                         <td className="py-4 px-6">
-                          <span className="px-3 py-1 bg-emerald-400/20 text-emerald-400 rounded-full text-sm">
+                          <span className="px-3 py-1 bg-cyan-400/20 text-cyan-400 rounded-full text-sm">
                             {expense.category}
                           </span>
                         </td>
                         <td className="py-4 px-6">
                           <div className="flex items-center space-x-2">
-                            <CreditCard size={16} className="text-emerald-400/60" />
-                            <span className="text-emerald-400/80 text-sm">{getCardName(expense.cardId)}</span>
+                            <CreditCard size={16} className="text-cyan-400/60" />
+                            <span className="text-cyan-400/80 text-sm">{getCardName(expense.cardId)}</span>
                           </div>
                         </td>
                         <td className="py-4 px-6 text-right">
-                          <span className="text-lg font-bold igloo-glow">${expense.amount.toFixed(2)}</span>
+                          <span className="text-lg font-bold text-cyan-400" style={{textShadow: '0 0 10px rgba(0, 255, 255, 0.5)'}}>{formatCurrency(expense.amount)}</span>
                         </td>
                         <td className="py-4 px-6 text-center">
                           <div className="flex items-center justify-center space-x-2">
                             <button
                               onClick={() => startEdit(expense)}
-                              className="p-2 text-emerald-400/70 hover:text-emerald-400 hover:bg-emerald-400/10 rounded-lg transition-colors"
+                              className="p-2 text-cyan-400/70 hover:text-cyan-400 hover:bg-cyan-400/10 rounded-lg transition-colors"
                             >
                               <Edit size={16} />
                             </button>
@@ -260,13 +264,13 @@ const Transactions: React.FC = () => {
               ) : (
                 <tr>
                   <td colSpan={6} className="py-12 text-center">
-                    <div className="text-emerald-400/60">
+                    <div className="text-cyan-400/60">
                       {searchTerm || filterCategory ? 'No transactions match your filters' : 'No transactions yet'}
                     </div>
                     {!searchTerm && !filterCategory && (
                       <button 
                         onClick={() => setShowAddModal(true)}
-                        className="mt-4 igloo-button px-6 py-2 rounded-xl hover-glow"
+                        className="mt-4 aeos-button-primary px-6 py-2 rounded-xl"
                       >
                         Add First Transaction
                       </button>
@@ -281,23 +285,23 @@ const Transactions: React.FC = () => {
 
       {/* Summary */}
       <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="igloo-card p-6 rounded-2xl text-center">
-          <h3 className="text-lg font-semibold igloo-glow mb-2">Total Transactions</h3>
-          <p className="text-3xl font-bold text-emerald-400">{filteredExpenses.length}</p>
+        <div className="aeos-card aeos-interactive aeos-parallax p-6 text-center">
+          <h3 className="text-lg font-semibold text-cyan-400 mb-2" style={{textShadow: '0 0 15px rgba(0, 255, 255, 0.6)'}}>Total Transactions</h3>
+          <p className="text-3xl font-bold text-cyan-400">{filteredExpenses.length}</p>
         </div>
-        <div className="igloo-card p-6 rounded-2xl text-center">
-          <h3 className="text-lg font-semibold igloo-glow mb-2">Total Amount</h3>
-          <p className="text-3xl font-bold text-emerald-400">
-            ${filteredExpenses.reduce((sum, exp) => sum + exp.amount, 0).toFixed(2)}
+        <div className="aeos-card aeos-interactive aeos-parallax p-6 text-center">
+          <h3 className="text-lg font-semibold text-cyan-400 mb-2" style={{textShadow: '0 0 15px rgba(0, 255, 255, 0.6)'}}>Total Amount</h3>
+          <p className="text-3xl font-bold text-cyan-400">
+            {formatCurrency(filteredExpenses.reduce((sum, exp) => sum + exp.amount, 0))}
           </p>
         </div>
-        <div className="igloo-card p-6 rounded-2xl text-center">
-          <h3 className="text-lg font-semibold igloo-glow mb-2">Average</h3>
-          <p className="text-3xl font-bold text-emerald-400">
-            ${filteredExpenses.length > 0 ? 
-              (filteredExpenses.reduce((sum, exp) => sum + exp.amount, 0) / filteredExpenses.length).toFixed(2) : 
-              '0.00'
-            }
+        <div className="aeos-card aeos-interactive aeos-parallax p-6 text-center">
+          <h3 className="text-lg font-semibold text-cyan-400 mb-2" style={{textShadow: '0 0 15px rgba(0, 255, 255, 0.6)'}}>Average</h3>
+          <p className="text-3xl font-bold text-cyan-400">
+            {formatCurrency(filteredExpenses.length > 0 ? 
+              (filteredExpenses.reduce((sum, exp) => sum + exp.amount, 0) / filteredExpenses.length) : 
+              0
+            )}
           </p>
         </div>
       </div>

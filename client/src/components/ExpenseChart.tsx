@@ -3,7 +3,11 @@ import { ExpenseContext } from '../context/ExpenseContext';
 import { PieChart } from 'lucide-react';
 
 const ExpenseChart: React.FC = () => {
-  const { expenses, totalExpenses } = useContext(ExpenseContext);
+  const { expenses, totalExpenses, selectedCountry } = useContext(ExpenseContext);
+
+  const formatCurrency = (amount: number) => {
+    return `${selectedCountry.currency.symbol}${amount.toFixed(2)}`;
+  };
 
   // Calculate category totals
   const categoryTotals = expenses.reduce((acc, expense) => {
@@ -25,11 +29,11 @@ const ExpenseChart: React.FC = () => {
   if (expenses.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center h-64 text-center">
-        <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-green-400/10 flex items-center justify-center">
-          <PieChart className="text-green-400 opacity-40" size={32} />
+        <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-cyan-400/10 flex items-center justify-center">
+          <PieChart className="text-cyan-400 opacity-40" size={32} />
         </div>
-        <h4 className="text-lg font-semibold matrix-glow mb-2">No data available</h4>
-        <p className="text-green-400/60">Add expenses to see the distribution chart</p>
+        <h4 className="text-lg font-semibold text-cyan-400 mb-2" style={{textShadow: '0 0 15px rgba(0, 255, 255, 0.6)'}}>No data available</h4>
+        <p className="text-cyan-400/60">Add expenses to see the distribution chart</p>
       </div>
     );
   }
@@ -56,8 +60,8 @@ const ExpenseChart: React.FC = () => {
           })}
           <div className="absolute inset-4 bg-gray-900 rounded-full flex items-center justify-center">
             <div className="text-center">
-              <p className="text-xs text-green-400/60">Total</p>
-              <p className="text-lg font-bold matrix-glow">${totalExpenses.toFixed(0)}</p>
+              <p className="text-xs text-cyan-400/60">Total</p>
+              <p className="text-lg font-bold text-cyan-400" style={{textShadow: '0 0 15px rgba(0, 255, 255, 0.6)'}}>{formatCurrency(totalExpenses).replace(/\.\d{2}$/, '')}</p>
             </div>
           </div>
         </div>
@@ -72,11 +76,11 @@ const ExpenseChart: React.FC = () => {
                 className="w-4 h-4 rounded-full"
                 style={{ backgroundColor: colors[index % colors.length] }}
               />
-              <span className="text-green-400 font-medium">{item.category}</span>
+              <span className="text-cyan-400 font-medium">{item.category}</span>
             </div>
             <div className="text-right">
-              <p className="font-bold matrix-glow">${item.amount.toFixed(2)}</p>
-              <p className="text-xs text-green-400/60">{item.percentage.toFixed(1)}%</p>
+              <p className="font-bold text-cyan-400" style={{textShadow: '0 0 10px rgba(0, 255, 255, 0.5)'}}>{formatCurrency(item.amount)}</p>
+              <p className="text-xs text-cyan-400/60">{item.percentage.toFixed(1)}%</p>
             </div>
           </div>
         ))}

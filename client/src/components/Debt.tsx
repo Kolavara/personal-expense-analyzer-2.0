@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Plus, TrendingDown, Calculator, Calendar, AlertTriangle, CheckCircle } from 'lucide-react';
+import { ExpenseContext } from '../context/ExpenseContext';
 
 interface Debt {
   id: string;
@@ -14,6 +15,7 @@ interface Debt {
 }
 
 const Debt: React.FC = () => {
+  const { selectedCountry } = useContext(ExpenseContext);
   const [debts, setDebts] = useState<Debt[]>([
     {
       id: '1',
@@ -50,6 +52,10 @@ const Debt: React.FC = () => {
     dueDate: '',
     type: 'credit_card' as const
   });
+
+  const formatCurrency = (amount: number) => {
+    return `${selectedCountry.currency.symbol}${amount.toFixed(2)}`;
+  };
 
   const handleAddDebt = (e: React.FormEvent) => {
     e.preventDefault();
@@ -120,7 +126,7 @@ const Debt: React.FC = () => {
 
   const getDebtStatus = (debt: Debt) => {
     const progress = ((debt.totalAmount - debt.currentBalance) / debt.totalAmount) * 100;
-    if (progress >= 80) return { status: 'excellent', color: 'text-green-400', bgColor: 'bg-green-400' };
+    if (progress >= 80) return { status: 'excellent', color: 'text-cyan-400', bgColor: 'bg-cyan-400' };
     if (progress >= 50) return { status: 'good', color: 'text-blue-400', bgColor: 'bg-blue-400' };
     if (progress >= 25) return { status: 'fair', color: 'text-yellow-400', bgColor: 'bg-yellow-400' };
     return { status: 'needs_attention', color: 'text-red-400', bgColor: 'bg-red-400' };
@@ -147,27 +153,27 @@ const Debt: React.FC = () => {
 
       {/* Summary Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div className="glass-card p-6 rounded-2xl hover-glow transition-all duration-300">
+        <div className="aeos-card aeos-interactive aeos-parallax p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-cyan-300/70 text-sm mb-1">Total Debt</p>
-              <p className="text-2xl font-bold text-red-400">${totalDebt.toFixed(2)}</p>
+              <p className="text-2xl font-bold text-red-400">{formatCurrency(totalDebt)}</p>
             </div>
             <TrendingDown className="text-red-400 opacity-60" size={24} />
           </div>
         </div>
 
-        <div className="glass-card p-6 rounded-2xl hover-glow transition-all duration-300">
+        <div className="aeos-card aeos-interactive aeos-parallax p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-cyan-300/70 text-sm mb-1">Monthly Payments</p>
-              <p className="text-2xl font-bold text-cyan-400" style={{textShadow: '0 0 20px rgba(0, 255, 255, 0.6)'}}>${totalMonthlyPayments.toFixed(2)}</p>
+              <p className="text-2xl font-bold text-cyan-400" style={{textShadow: '0 0 20px rgba(0, 255, 255, 0.6)'}}>{formatCurrency(totalMonthlyPayments)}</p>
             </div>
             <Calendar className="text-cyan-400 opacity-60" size={24} />
           </div>
         </div>
 
-        <div className="glass-card p-6 rounded-2xl hover-glow transition-all duration-300">
+        <div className="aeos-card aeos-interactive aeos-parallax p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-cyan-300/70 text-sm mb-1">Avg Interest Rate</p>
@@ -177,13 +183,13 @@ const Debt: React.FC = () => {
           </div>
         </div>
 
-        <div className="matrix-card p-6 rounded-lg hover-glow transition-all duration-300">
+        <div className="aeos-card aeos-interactive aeos-parallax p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-green-400/70 text-sm mb-1">Active Debts</p>
-              <p className="text-2xl font-bold matrix-glow">{debts.length}</p>
+              <p className="text-cyan-300/70 text-sm mb-1">Active Debts</p>
+              <p className="text-2xl font-bold text-cyan-400" style={{textShadow: '0 0 20px rgba(0, 255, 255, 0.6)'}}>{debts.length}</p>
             </div>
-            <AlertTriangle className="text-green-400 opacity-60" size={24} />
+            <AlertTriangle className="text-cyan-400 opacity-60" size={24} />
           </div>
         </div>
       </div>
@@ -192,7 +198,7 @@ const Debt: React.FC = () => {
       <div className="mb-8">
         <button
           onClick={() => setShowAddForm(!showAddForm)}
-          className="matrix-button px-6 py-3 rounded-lg hover-glow flex items-center space-x-2"
+          className="aeos-button-primary px-6 py-3 rounded-lg flex items-center space-x-2"
         >
           <Plus size={20} />
           <span>Add New Debt</span>
@@ -201,21 +207,21 @@ const Debt: React.FC = () => {
 
       {/* Add Debt Form */}
       {showAddForm && (
-        <div className="matrix-card p-6 rounded-lg mb-8">
-          <h3 className="text-xl font-semibold matrix-glow mb-4">Add New Debt</h3>
+        <div className="aeos-card aeos-interactive p-6 mb-8">
+          <h3 className="text-xl font-semibold text-cyan-400 mb-4" style={{textShadow: '0 0 15px rgba(0, 255, 255, 0.6)'}}>Add New Debt</h3>
           <form onSubmit={handleAddDebt} className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <input
               type="text"
               placeholder="Debt Name (e.g., Credit Card, Student Loan)"
               value={newDebt.name}
               onChange={(e) => setNewDebt({ ...newDebt, name: e.target.value })}
-              className="p-3 bg-gray-800/50 matrix-border rounded-lg text-green-400 placeholder-green-400/50 focus:outline-none focus:ring-2 focus:ring-green-400/50"
+              className="p-3 bg-cyan-400/5 border border-cyan-400/30 rounded-lg text-cyan-400 placeholder-cyan-400/50 focus:outline-none focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-400/25 transition-all"
               required
             />
             <select
               value={newDebt.type}
               onChange={(e) => setNewDebt({ ...newDebt, type: e.target.value as any })}
-              className="p-3 bg-gray-800/50 matrix-border rounded-lg text-green-400 focus:outline-none focus:ring-2 focus:ring-green-400/50"
+              className="p-3 bg-cyan-400/5 border border-cyan-400/30 rounded-lg text-cyan-400 focus:outline-none focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-400/25 transition-all"
             >
               <option value="credit_card">Credit Card</option>
               <option value="student_loan">Student Loan</option>
@@ -229,7 +235,7 @@ const Debt: React.FC = () => {
               step="0.01"
               value={newDebt.totalAmount}
               onChange={(e) => setNewDebt({ ...newDebt, totalAmount: e.target.value })}
-              className="p-3 bg-gray-800/50 matrix-border rounded-lg text-green-400 placeholder-green-400/50 focus:outline-none focus:ring-2 focus:ring-green-400/50"
+              className="p-3 bg-cyan-400/5 border border-cyan-400/30 rounded-lg text-cyan-400 placeholder-cyan-400/50 focus:outline-none focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-400/25 transition-all"
               required
             />
             <input
@@ -238,7 +244,7 @@ const Debt: React.FC = () => {
               step="0.01"
               value={newDebt.currentBalance}
               onChange={(e) => setNewDebt({ ...newDebt, currentBalance: e.target.value })}
-              className="p-3 bg-gray-800/50 matrix-border rounded-lg text-green-400 placeholder-green-400/50 focus:outline-none focus:ring-2 focus:ring-green-400/50"
+              className="p-3 bg-cyan-400/5 border border-cyan-400/30 rounded-lg text-cyan-400 placeholder-cyan-400/50 focus:outline-none focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-400/25 transition-all"
               required
             />
             <input
@@ -247,7 +253,7 @@ const Debt: React.FC = () => {
               step="0.01"
               value={newDebt.interestRate}
               onChange={(e) => setNewDebt({ ...newDebt, interestRate: e.target.value })}
-              className="p-3 bg-gray-800/50 matrix-border rounded-lg text-green-400 placeholder-green-400/50 focus:outline-none focus:ring-2 focus:ring-green-400/50"
+              className="p-3 bg-cyan-400/5 border border-cyan-400/30 rounded-lg text-cyan-400 placeholder-cyan-400/50 focus:outline-none focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-400/25 transition-all"
             />
             <input
               type="number"
@@ -255,7 +261,7 @@ const Debt: React.FC = () => {
               step="0.01"
               value={newDebt.monthlyPayment}
               onChange={(e) => setNewDebt({ ...newDebt, monthlyPayment: e.target.value })}
-              className="p-3 bg-gray-800/50 matrix-border rounded-lg text-green-400 placeholder-green-400/50 focus:outline-none focus:ring-2 focus:ring-green-400/50"
+              className="p-3 bg-cyan-400/5 border border-cyan-400/30 rounded-lg text-cyan-400 placeholder-cyan-400/50 focus:outline-none focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-400/25 transition-all"
               required
             />
             <input
@@ -264,26 +270,26 @@ const Debt: React.FC = () => {
               step="0.01"
               value={newDebt.minimumPayment}
               onChange={(e) => setNewDebt({ ...newDebt, minimumPayment: e.target.value })}
-              className="p-3 bg-gray-800/50 matrix-border rounded-lg text-green-400 placeholder-green-400/50 focus:outline-none focus:ring-2 focus:ring-green-400/50"
+              className="p-3 bg-cyan-400/5 border border-cyan-400/30 rounded-lg text-cyan-400 placeholder-cyan-400/50 focus:outline-none focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-400/25 transition-all"
             />
             <input
               type="date"
               placeholder="Next Due Date"
               value={newDebt.dueDate}
               onChange={(e) => setNewDebt({ ...newDebt, dueDate: e.target.value })}
-              className="p-3 bg-gray-800/50 matrix-border rounded-lg text-green-400 focus:outline-none focus:ring-2 focus:ring-green-400/50"
+              className="p-3 bg-cyan-400/5 border border-cyan-400/30 rounded-lg text-cyan-400 focus:outline-none focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-400/25 transition-all"
             />
             <div className="md:col-span-2 flex space-x-4">
               <button
                 type="submit"
-                className="flex-1 matrix-button py-3 rounded-lg hover-glow font-semibold"
+                className="flex-1 aeos-button-primary py-3 rounded-lg font-semibold"
               >
                 Add Debt
               </button>
               <button
                 type="button"
                 onClick={() => setShowAddForm(false)}
-                className="flex-1 px-6 py-3 bg-gray-700 text-gray-300 rounded-lg hover:bg-gray-600 transition-colors"
+                className="flex-1 aeos-button py-3 rounded-lg"
               >
                 Cancel
               </button>
@@ -301,16 +307,16 @@ const Debt: React.FC = () => {
           const totalInterest = calculateTotalInterest(debt);
 
           return (
-            <div key={debt.id} className="matrix-card p-6 rounded-lg hover-glow transition-all duration-300">
+            <div key={debt.id} className="aeos-card aeos-interactive aeos-parallax p-6">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center space-x-3">
                   <span className="text-2xl">{getDebtTypeIcon(debt.type)}</span>
                   <div>
-                    <h3 className="text-lg font-semibold text-green-400">{debt.name}</h3>
-                    <p className="text-sm text-green-400/60 capitalize">{debt.type.replace('_', ' ')}</p>
+                    <h3 className="text-lg font-semibold text-cyan-400">{debt.name}</h3>
+                    <p className="text-sm text-cyan-400/60 capitalize">{debt.type.replace('_', ' ')}</p>
                   </div>
                 </div>
-                <div className={`px-3 py-1 rounded-full text-xs font-semibold ${status.color} bg-gray-800/50`}>
+                <div className={`px-3 py-1 rounded-full text-xs font-semibold ${status.color} bg-cyan-400/10`}>
                   {status.status.replace('_', ' ').toUpperCase()}
                 </div>
               </div>
@@ -318,7 +324,7 @@ const Debt: React.FC = () => {
               {/* Progress Bar */}
               <div className="mb-4">
                 <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm text-green-400/70">Progress</span>
+                  <span className="text-sm text-cyan-400/70">Progress</span>
                   <span className={`text-sm font-semibold ${status.color}`}>
                     {progress.toFixed(1)}% paid off
                   </span>
@@ -334,33 +340,33 @@ const Debt: React.FC = () => {
               {/* Debt Details */}
               <div className="grid grid-cols-2 gap-4 mb-4">
                 <div>
-                  <p className="text-green-400/70 text-sm">Current Balance</p>
-                  <p className="text-lg font-bold text-red-400">${debt.currentBalance.toFixed(2)}</p>
+                  <p className="text-cyan-400/70 text-sm">Current Balance</p>
+                  <p className="text-lg font-bold text-red-400">{formatCurrency(debt.currentBalance)}</p>
                 </div>
                 <div>
-                  <p className="text-green-400/70 text-sm">Monthly Payment</p>
-                  <p className="text-lg font-bold matrix-glow">${debt.monthlyPayment.toFixed(2)}</p>
+                  <p className="text-cyan-400/70 text-sm">Monthly Payment</p>
+                  <p className="text-lg font-bold text-cyan-400" style={{textShadow: '0 0 15px rgba(0, 255, 255, 0.6)'}}>{formatCurrency(debt.monthlyPayment)}</p>
                 </div>
                 <div>
-                  <p className="text-green-400/70 text-sm">Interest Rate</p>
+                  <p className="text-cyan-400/70 text-sm">Interest Rate</p>
                   <p className="text-lg font-bold text-yellow-400">{debt.interestRate.toFixed(2)}%</p>
                 </div>
                 <div>
-                  <p className="text-green-400/70 text-sm">Payoff Time</p>
+                  <p className="text-cyan-400/70 text-sm">Payoff Time</p>
                   <p className="text-lg font-bold text-blue-400">{payoffTime}</p>
                 </div>
               </div>
 
               {/* Additional Info */}
-              <div className="pt-4 border-t border-green-400/20">
+              <div className="pt-4 border-t border-cyan-400/20">
                 <div className="flex justify-between items-center text-sm">
-                  <span className="text-green-400/70">Total Interest:</span>
-                  <span className="font-semibold text-red-400">${totalInterest.toFixed(2)}</span>
+                  <span className="text-cyan-400/70">Total Interest:</span>
+                  <span className="font-semibold text-red-400">{formatCurrency(totalInterest)}</span>
                 </div>
                 {debt.dueDate && (
                   <div className="flex justify-between items-center text-sm mt-1">
-                    <span className="text-green-400/70">Next Due:</span>
-                    <span className="font-semibold text-green-400">{debt.dueDate}</span>
+                    <span className="text-cyan-400/70">Next Due:</span>
+                    <span className="font-semibold text-cyan-400">{debt.dueDate}</span>
                   </div>
                 )}
               </div>
@@ -371,15 +377,15 @@ const Debt: React.FC = () => {
 
       {/* Empty State */}
       {debts.length === 0 && !showAddForm && (
-        <div className="matrix-card p-12 rounded-lg text-center">
-          <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-green-400/10 flex items-center justify-center">
-            <CheckCircle className="text-green-400 opacity-40" size={32} />
+        <div className="aeos-card aeos-interactive p-12 text-center">
+          <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-cyan-400/10 flex items-center justify-center">
+            <CheckCircle className="text-cyan-400 opacity-40" size={32} />
           </div>
-          <h3 className="text-xl font-semibold matrix-glow mb-2">No debts tracked yet</h3>
-          <p className="text-green-400/60 mb-6">Add your first debt to start managing your payoff strategy</p>
+          <h3 className="text-xl font-semibold text-cyan-400 mb-2" style={{textShadow: '0 0 15px rgba(0, 255, 255, 0.6)'}}>No debts tracked yet</h3>
+          <p className="text-cyan-400/60 mb-6">Add your first debt to start managing your payoff strategy</p>
           <button
             onClick={() => setShowAddForm(true)}
-            className="matrix-button px-6 py-3 rounded-lg hover-glow"
+            className="aeos-button-primary px-6 py-3 rounded-lg"
           >
             Add First Debt
           </button>
@@ -388,30 +394,30 @@ const Debt: React.FC = () => {
 
       {/* Debt Payoff Strategy */}
       {debts.length > 0 && (
-        <div className="matrix-card p-6 rounded-lg">
-          <h3 className="text-xl font-semibold matrix-glow mb-6">Payoff Strategy Recommendations</h3>
+        <div className="aeos-card aeos-interactive p-6">
+          <h3 className="text-xl font-semibold text-cyan-400 mb-6" style={{textShadow: '0 0 20px rgba(0, 255, 255, 0.6)'}}>Payoff Strategy Recommendations</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-gray-800/50 p-4 rounded-lg">
-              <h4 className="font-semibold text-green-400 mb-2">🔥 Avalanche Method</h4>
-              <p className="text-sm text-green-400/70 mb-3">Pay minimums on all debts, then focus extra payments on highest interest rate debt first.</p>
+            <div className="bg-cyan-400/5 p-4 rounded-lg border border-cyan-400/20">
+              <h4 className="font-semibold text-cyan-400 mb-2">🔥 Avalanche Method</h4>
+              <p className="text-sm text-cyan-400/70 mb-3">Pay minimums on all debts, then focus extra payments on highest interest rate debt first.</p>
               <div className="space-y-2">
                 {[...debts].sort((a, b) => b.interestRate - a.interestRate).slice(0, 3).map((debt, index) => (
                   <div key={debt.id} className="flex justify-between items-center text-sm">
-                    <span className="text-green-400">#{index + 1} {debt.name}</span>
+                    <span className="text-cyan-400">#{index + 1} {debt.name}</span>
                     <span className="text-yellow-400">{debt.interestRate.toFixed(1)}%</span>
                   </div>
                 ))}
               </div>
             </div>
             
-            <div className="bg-gray-800/50 p-4 rounded-lg">
-              <h4 className="font-semibold text-green-400 mb-2">⚡ Snowball Method</h4>
-              <p className="text-sm text-green-400/70 mb-3">Pay minimums on all debts, then focus extra payments on smallest balance first for psychological wins.</p>
+            <div className="bg-cyan-400/5 p-4 rounded-lg border border-cyan-400/20">
+              <h4 className="font-semibold text-cyan-400 mb-2">⚡ Snowball Method</h4>
+              <p className="text-sm text-cyan-400/70 mb-3">Pay minimums on all debts, then focus extra payments on smallest balance first for psychological wins.</p>
               <div className="space-y-2">
                 {[...debts].sort((a, b) => a.currentBalance - b.currentBalance).slice(0, 3).map((debt, index) => (
                   <div key={debt.id} className="flex justify-between items-center text-sm">
-                    <span className="text-green-400">#{index + 1} {debt.name}</span>
-                    <span className="text-red-400">${debt.currentBalance.toFixed(0)}</span>
+                    <span className="text-cyan-400">#{index + 1} {debt.name}</span>
+                    <span className="text-red-400">{formatCurrency(debt.currentBalance).replace(/\.\d{2}$/, '')}</span>
                   </div>
                 ))}
               </div>

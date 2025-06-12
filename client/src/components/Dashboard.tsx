@@ -3,9 +3,10 @@ import { Plus, TrendingUp, TrendingDown, DollarSign, Calendar, BarChart3 } from 
 import { ExpenseContext } from '../context/ExpenseContext';
 import AddExpenseModal from './AddExpenseModal';
 import ExpenseChart from './ExpenseChart';
+import CountrySelector from './CountrySelector';
 
 const Dashboard: React.FC = () => {
-  const { expenses, totalExpenses, categories, cards } = useContext(ExpenseContext);
+  const { expenses, totalExpenses, categories, cards, selectedCountry } = useContext(ExpenseContext);
   const [showAddModal, setShowAddModal] = useState(false);
 
   const currentMonth = new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
@@ -20,18 +21,30 @@ const Dashboard: React.FC = () => {
   const averageExpense = expenses.length > 0 ? totalExpenses / expenses.length : 0;
   const totalCardBalance = cards.reduce((sum, card) => sum + card.balance, 0);
 
+  const formatCurrency = (amount: number) => {
+    return `${selectedCountry.currency.symbol}${amount.toFixed(2)}`;
+  };
+
   return (
     <div className="space-y-8">
       {/* Header */}
-      <div>
-        <h1 className="text-4xl font-bold text-cyan-400 mb-2 tracking-tight" style={{
-          textShadow: '0 0 30px rgba(0, 255, 255, 0.8), 0 0 60px rgba(0, 255, 255, 0.4)'
-        }}>
-          Financial Dashboard
-        </h1>
-        <p className="text-cyan-300/80 text-lg">
-          Track and analyze your expenses with intelligent insights
-        </p>
+      <div className="flex items-start justify-between">
+        <div>
+          <h1 className="text-4xl font-bold text-cyan-400 mb-2 tracking-tight" style={{
+            textShadow: '0 0 30px rgba(0, 255, 255, 0.8), 0 0 60px rgba(0, 255, 255, 0.4)'
+          }}>
+            Financial Dashboard
+          </h1>
+          <p className="text-cyan-300/80 text-lg">
+            Track and analyze your expenses with intelligent insights
+          </p>
+        </div>
+        
+        {/* Country Selector */}
+        <div className="flex flex-col items-end space-y-2">
+          <span className="text-cyan-400/70 text-sm font-medium">Country</span>
+          <CountrySelector />
+        </div>
       </div>
 
       {/* Navigation Tabs */}
@@ -56,7 +69,7 @@ const Dashboard: React.FC = () => {
               <p className="text-cyan-300/70 text-sm mb-1 font-mono">Total Expenses</p>
               <p className="text-2xl font-bold text-cyan-400" style={{
                 textShadow: '0 0 15px rgba(0, 255, 255, 0.6)'
-              }}>${totalExpenses.toFixed(2)}</p>
+              }}>{formatCurrency(totalExpenses)}</p>
             </div>
             <DollarSign className="text-cyan-400 opacity-80" size={24} />
           </div>
@@ -68,7 +81,7 @@ const Dashboard: React.FC = () => {
               <p className="text-cyan-300/70 text-sm mb-1 font-mono">This Month</p>
               <p className="text-2xl font-bold text-cyan-400" style={{
                 textShadow: '0 0 15px rgba(0, 255, 255, 0.6)'
-              }}>${monthlyTotal.toFixed(2)}</p>
+              }}>{formatCurrency(monthlyTotal)}</p>
             </div>
             <Calendar className="text-cyan-400 opacity-80" size={24} />
           </div>
@@ -80,7 +93,7 @@ const Dashboard: React.FC = () => {
               <p className="text-cyan-300/70 text-sm mb-1 font-mono">Card Balance</p>
               <p className="text-2xl font-bold text-cyan-400" style={{
                 textShadow: '0 0 15px rgba(0, 255, 255, 0.6)'
-              }}>${totalCardBalance.toFixed(2)}</p>
+              }}>{formatCurrency(totalCardBalance)}</p>
             </div>
             <TrendingUp className="text-cyan-400 opacity-80" size={24} />
           </div>
@@ -121,7 +134,7 @@ const Dashboard: React.FC = () => {
                 </div>
                 <span className="font-bold text-lg text-cyan-400" style={{
                   textShadow: '0 0 10px rgba(0, 255, 255, 0.5)'
-                }}>${expense.amount.toFixed(2)}</span>
+                }}>{formatCurrency(expense.amount)}</span>
               </div>
             ))}
             {expenses.length === 0 && (
@@ -172,7 +185,7 @@ const Dashboard: React.FC = () => {
                 </div>
                 <span className="text-lg font-bold text-cyan-400" style={{
                   textShadow: '0 0 10px rgba(0, 255, 255, 0.5)'
-                }}>${categoryTotal.toFixed(2)}</span>
+                }}>{formatCurrency(categoryTotal)}</span>
               </div>
             );
           })}

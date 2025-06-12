@@ -3,7 +3,7 @@ import { Plus, CreditCard, Edit, Trash2, Eye, EyeOff, MoreVertical, Check, X } f
 import { ExpenseContext } from '../context/ExpenseContext';
 
 const Cards: React.FC = () => {
-  const { cards, addCard, updateCard, deleteCard } = useContext(ExpenseContext);
+  const { cards, addCard, updateCard, deleteCard, selectedCountry } = useContext(ExpenseContext);
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingCard, setEditingCard] = useState<string | null>(null);
   const [editFormData, setEditFormData] = useState({
@@ -22,6 +22,10 @@ const Cards: React.FC = () => {
     cardType: 'visa' as const,
     color: 'blue'
   });
+
+  const formatCurrency = (amount: number) => {
+    return `${selectedCountry.currency.symbol}${amount.toFixed(2)}`;
+  };
 
   const handleAddCard = (e: React.FormEvent) => {
     e.preventDefault();
@@ -121,7 +125,7 @@ const Cards: React.FC = () => {
 
       {/* Summary Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div className="glass-card p-6 rounded-2xl hover-glow transition-all duration-300">
+        <div className="aeos-card aeos-interactive aeos-parallax p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-cyan-300/70 text-sm mb-1">Total Cards</p>
@@ -131,25 +135,25 @@ const Cards: React.FC = () => {
           </div>
         </div>
 
-        <div className="glass-card p-6 rounded-2xl hover-glow transition-all duration-300">
+        <div className="aeos-card aeos-interactive aeos-parallax p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-cyan-300/70 text-sm mb-1">Total Balance</p>
-              <p className="text-2xl font-bold text-cyan-400" style={{textShadow: '0 0 20px rgba(0, 255, 255, 0.6)'}}>${totalBalance.toFixed(2)}</p>
+              <p className="text-2xl font-bold text-cyan-400" style={{textShadow: '0 0 20px rgba(0, 255, 255, 0.6)'}}>{formatCurrency(totalBalance)}</p>
             </div>
             <CreditCard className="text-cyan-400 opacity-60" size={24} />
           </div>
         </div>
 
-        <div className="igloo-card p-6 rounded-2xl hover-glow transition-all duration-300">
+        <div className="aeos-card aeos-interactive aeos-parallax p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-emerald-400/70 text-sm mb-1">Average Balance</p>
-              <p className="text-2xl font-bold igloo-glow">
-                ${cards.length > 0 ? (totalBalance / cards.length).toFixed(2) : '0.00'}
+              <p className="text-cyan-300/70 text-sm mb-1">Average Balance</p>
+              <p className="text-2xl font-bold text-cyan-400" style={{textShadow: '0 0 20px rgba(0, 255, 255, 0.6)'}}>
+                {formatCurrency(cards.length > 0 ? (totalBalance / cards.length) : 0)}
               </p>
             </div>
-            <CreditCard className="text-emerald-400 opacity-60" size={24} />
+            <CreditCard className="text-cyan-400 opacity-60" size={24} />
           </div>
         </div>
       </div>
@@ -158,7 +162,7 @@ const Cards: React.FC = () => {
       <div className="mb-8">
         <button
           onClick={() => setShowAddForm(!showAddForm)}
-          className="igloo-button px-6 py-3 rounded-xl hover-glow flex items-center space-x-2"
+          className="aeos-button-primary px-6 py-3 rounded-xl flex items-center space-x-2"
         >
           <Plus size={20} />
           <span>Add New Card</span>
@@ -169,8 +173,8 @@ const Cards: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 mb-8">
         {/* Add Card Form */}
         {showAddForm && (
-          <div className="igloo-card p-6 rounded-2xl">
-            <h3 className="text-xl font-semibold igloo-glow mb-4 flex items-center space-x-2">
+          <div className="aeos-card aeos-interactive p-6">
+            <h3 className="text-xl font-semibold text-cyan-400 mb-4 flex items-center space-x-2" style={{textShadow: '0 0 15px rgba(0, 255, 255, 0.6)'}}>
               <Plus size={20} />
               <span>Add New Card</span>
             </h3>
@@ -180,7 +184,7 @@ const Cards: React.FC = () => {
                 placeholder="Card Name"
                 value={newCard.name}
                 onChange={(e) => setNewCard({ ...newCard, name: e.target.value })}
-                className="w-full p-3 bg-slate-800/50 igloo-border rounded-xl text-emerald-400 placeholder-emerald-400/50 focus:outline-none focus:ring-2 focus:ring-emerald-400/50"
+                className="w-full p-3 bg-cyan-400/5 border border-cyan-400/30 rounded-xl text-cyan-400 placeholder-cyan-400/50 focus:outline-none focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-400/25 transition-all"
                 required
               />
               <input
@@ -189,7 +193,7 @@ const Cards: React.FC = () => {
                 step="0.01"
                 value={newCard.balance}
                 onChange={(e) => setNewCard({ ...newCard, balance: e.target.value })}
-                className="w-full p-3 bg-slate-800/50 igloo-border rounded-xl text-emerald-400 placeholder-emerald-400/50 focus:outline-none focus:ring-2 focus:ring-emerald-400/50"
+                className="w-full p-3 bg-cyan-400/5 border border-cyan-400/30 rounded-xl text-cyan-400 placeholder-cyan-400/50 focus:outline-none focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-400/25 transition-all"
                 required
               />
               <input
@@ -197,13 +201,13 @@ const Cards: React.FC = () => {
                 placeholder="Card Number (optional)"
                 value={newCard.cardNumber}
                 onChange={(e) => setNewCard({ ...newCard, cardNumber: e.target.value })}
-                className="w-full p-3 bg-slate-800/50 igloo-border rounded-xl text-emerald-400 placeholder-emerald-400/50 focus:outline-none focus:ring-2 focus:ring-emerald-400/50"
+                className="w-full p-3 bg-cyan-400/5 border border-cyan-400/30 rounded-xl text-cyan-400 placeholder-cyan-400/50 focus:outline-none focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-400/25 transition-all"
               />
               <div className="grid grid-cols-2 gap-4">
                 <select
                   value={newCard.cardType}
                   onChange={(e) => setNewCard({ ...newCard, cardType: e.target.value as any })}
-                  className="p-3 bg-slate-800/50 igloo-border rounded-xl text-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-400/50"
+                  className="p-3 bg-cyan-400/5 border border-cyan-400/30 rounded-xl text-cyan-400 focus:outline-none focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-400/25 transition-all"
                 >
                   <option value="visa">Visa</option>
                   <option value="mastercard">Mastercard</option>
@@ -213,7 +217,7 @@ const Cards: React.FC = () => {
                 <select
                   value={newCard.color}
                   onChange={(e) => setNewCard({ ...newCard, color: e.target.value })}
-                  className="p-3 bg-slate-800/50 igloo-border rounded-xl text-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-400/50"
+                  className="p-3 bg-cyan-400/5 border border-cyan-400/30 rounded-xl text-cyan-400 focus:outline-none focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-400/25 transition-all"
                 >
                   <option value="blue">Blue</option>
                   <option value="green">Green</option>
@@ -225,14 +229,14 @@ const Cards: React.FC = () => {
               <div className="flex space-x-4">
                 <button
                   type="submit"
-                  className="flex-1 igloo-button py-3 rounded-xl hover-glow font-semibold"
+                  className="flex-1 aeos-button-primary py-3 rounded-xl font-semibold"
                 >
                   Add Card
                 </button>
                 <button
                   type="button"
                   onClick={() => setShowAddForm(false)}
-                  className="flex-1 px-6 py-3 bg-slate-700 text-slate-300 rounded-xl hover:bg-slate-600 transition-colors"
+                  className="flex-1 aeos-button py-3 rounded-xl"
                 >
                   Cancel
                 </button>
@@ -251,7 +255,7 @@ const Cards: React.FC = () => {
                 <div className="flex justify-between items-start mb-8">
                   <div>
                     <p className="text-white/80 text-sm">{card.name}</p>
-                    <p className="text-2xl font-bold">${card.balance.toFixed(2)}</p>
+                    <p className="text-2xl font-bold">{formatCurrency(card.balance)}</p>
                   </div>
                   <CreditCard size={32} className="text-white/60" />
                 </div>
@@ -269,14 +273,14 @@ const Cards: React.FC = () => {
             </div>
 
             {/* Card Controls */}
-            <div className="igloo-card p-4 rounded-2xl">
+            <div className="aeos-card aeos-interactive p-4">
               {editingCard === card.id ? (
                 <form onSubmit={handleEditSubmit} className="space-y-3">
                   <input
                     type="text"
                     value={editFormData.name}
                     onChange={(e) => setEditFormData({ ...editFormData, name: e.target.value })}
-                    className="w-full p-2 bg-slate-800/50 igloo-border rounded-xl text-emerald-400 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400/50"
+                    className="w-full p-2 bg-cyan-400/5 border border-cyan-400/30 rounded-xl text-cyan-400 text-sm focus:outline-none focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-400/25 transition-all"
                     placeholder="Card name"
                     required
                   />
@@ -285,21 +289,21 @@ const Cards: React.FC = () => {
                     step="0.01"
                     value={editFormData.balance}
                     onChange={(e) => setEditFormData({ ...editFormData, balance: e.target.value })}
-                    className="w-full p-2 bg-slate-800/50 igloo-border rounded-xl text-emerald-400 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400/50"
+                    className="w-full p-2 bg-cyan-400/5 border border-cyan-400/30 rounded-xl text-cyan-400 text-sm focus:outline-none focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-400/25 transition-all"
                     placeholder="Balance"
                     required
                   />
                   <div className="flex space-x-2">
                     <button
                       type="submit"
-                      className="flex-1 p-2 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 transition-colors flex items-center justify-center"
+                      className="flex-1 p-2 aeos-button-primary rounded-xl flex items-center justify-center"
                     >
                       <Check size={16} />
                     </button>
                     <button
                       type="button"
                       onClick={cancelEdit}
-                      className="flex-1 p-2 bg-slate-600 text-white rounded-xl hover:bg-slate-700 transition-colors flex items-center justify-center"
+                      className="flex-1 p-2 aeos-button rounded-xl flex items-center justify-center"
                     >
                       <X size={16} />
                     </button>
@@ -307,11 +311,11 @@ const Cards: React.FC = () => {
                 </form>
               ) : (
                 <div className="flex items-center justify-between">
-                  <h4 className="font-semibold text-emerald-400">{card.name}</h4>
+                  <h4 className="font-semibold text-cyan-400">{card.name}</h4>
                   <div className="flex space-x-2">
                     <button
                       onClick={() => startEdit(card)}
-                      className="p-2 text-emerald-400/70 hover:text-emerald-400 hover:bg-emerald-400/10 rounded-xl transition-colors"
+                      className="p-2 text-cyan-400/70 hover:text-cyan-400 hover:bg-cyan-400/10 rounded-xl transition-colors"
                     >
                       <Edit size={16} />
                     </button>
@@ -331,15 +335,15 @@ const Cards: React.FC = () => {
 
       {/* Empty State */}
       {cards.length === 0 && !showAddForm && (
-        <div className="igloo-card p-12 rounded-2xl text-center">
-          <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-emerald-400/10 flex items-center justify-center">
-            <CreditCard className="text-emerald-400 opacity-40" size={32} />
+        <div className="aeos-card aeos-interactive p-12 text-center">
+          <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-cyan-400/10 flex items-center justify-center">
+            <CreditCard className="text-cyan-400 opacity-40" size={32} />
           </div>
-          <h3 className="text-xl font-semibold igloo-glow mb-2">No cards added yet</h3>
-          <p className="text-emerald-400/60 mb-6">Add your first card to start managing your balances</p>
+          <h3 className="text-xl font-semibold text-cyan-400 mb-2" style={{textShadow: '0 0 15px rgba(0, 255, 255, 0.6)'}}>No cards added yet</h3>
+          <p className="text-cyan-400/60 mb-6">Add your first card to start managing your balances</p>
           <button
             onClick={() => setShowAddForm(true)}
-            className="igloo-button px-6 py-3 rounded-xl hover-glow"
+            className="aeos-button-primary px-6 py-3 rounded-xl"
           >
             Add First Card
           </button>

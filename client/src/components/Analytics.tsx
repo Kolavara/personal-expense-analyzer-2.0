@@ -3,7 +3,11 @@ import { TrendingUp, TrendingDown, BarChart3, PieChart } from 'lucide-react';
 import { ExpenseContext } from '../context/ExpenseContext';
 
 const Analytics: React.FC = () => {
-  const { expenses, totalExpenses } = useContext(ExpenseContext);
+  const { expenses, totalExpenses, selectedCountry } = useContext(ExpenseContext);
+
+  const formatCurrency = (amount: number) => {
+    return `${selectedCountry.currency.symbol}${amount.toFixed(2)}`;
+  };
 
   // Calculate monthly trends
   const getMonthlyTrends = () => {
@@ -52,7 +56,7 @@ const Analytics: React.FC = () => {
 
       {/* Key Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div className="glass-card p-6 rounded-2xl hover-glow transition-all duration-300">
+        <div className="aeos-card aeos-interactive aeos-parallax p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-cyan-300/70 text-sm mb-1">Monthly Change</p>
@@ -67,31 +71,31 @@ const Analytics: React.FC = () => {
           </div>
         </div>
 
-        <div className="glass-card p-6 rounded-2xl hover-glow transition-all duration-300">
+        <div className="aeos-card aeos-interactive aeos-parallax p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-cyan-300/70 text-sm mb-1">Daily Average</p>
               <p className="text-2xl font-bold text-cyan-400" style={{textShadow: '0 0 20px rgba(0, 255, 255, 0.6)'}}>
-                ${expenses.length > 0 ? (totalExpenses / Math.max(1, Math.ceil((Date.now() - new Date(expenses[0]?.date || Date.now()).getTime()) / (1000 * 60 * 60 * 24)))).toFixed(2) : '0.00'}
+                {formatCurrency(expenses.length > 0 ? (totalExpenses / Math.max(1, Math.ceil((Date.now() - new Date(expenses[0]?.date || Date.now()).getTime()) / (1000 * 60 * 60 * 24)))) : 0)}
               </p>
             </div>
             <BarChart3 className="text-cyan-400 opacity-60" size={24} />
           </div>
         </div>
 
-        <div className="glass-card p-6 rounded-2xl hover-glow transition-all duration-300">
+        <div className="aeos-card aeos-interactive aeos-parallax p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-cyan-300/70 text-sm mb-1">Largest Expense</p>
               <p className="text-2xl font-bold text-cyan-400" style={{textShadow: '0 0 20px rgba(0, 255, 255, 0.6)'}}>
-                ${Math.max(...expenses.map(e => e.amount), 0).toFixed(2)}
+                {formatCurrency(Math.max(...expenses.map(e => e.amount), 0))}
               </p>
             </div>
             <TrendingUp className="text-cyan-400 opacity-60" size={24} />
           </div>
         </div>
 
-        <div className="glass-card p-6 rounded-2xl hover-glow transition-all duration-300">
+        <div className="aeos-card aeos-interactive aeos-parallax p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-cyan-300/70 text-sm mb-1">Categories</p>
@@ -105,7 +109,7 @@ const Analytics: React.FC = () => {
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
         {/* Monthly Trends */}
-        <div className="glass-card p-6 rounded-2xl">
+        <div className="aeos-card aeos-interactive p-6">
           <h3 className="text-xl font-semibold text-cyan-400 mb-6" style={{textShadow: '0 0 20px rgba(0, 255, 255, 0.6)'}}>Monthly Spending Trends</h3>
           <div className="space-y-4">
             {monthlyTrends.map(([month, amount], index) => {
@@ -116,11 +120,11 @@ const Analytics: React.FC = () => {
                 <div key={month} className="space-y-2">
                   <div className="flex justify-between items-center">
                     <span className="text-cyan-400 font-medium">{month}</span>
-                    <span className="text-cyan-400 font-bold" style={{textShadow: '0 0 15px rgba(0, 255, 255, 0.5)'}}>${amount.toFixed(2)}</span>
+                    <span className="text-cyan-400 font-bold" style={{textShadow: '0 0 15px rgba(0, 255, 255, 0.5)'}}>{formatCurrency(amount)}</span>
                   </div>
                   <div className="w-full bg-gray-700/50 rounded-full h-3">
                     <div 
-                      className="bg-gradient-to-r from-cyan-400 to-cyan-500 h-3 rounded-full transition-all duration-1000 delay-${index * 100} shadow-lg shadow-cyan-400/30"
+                      className="bg-gradient-to-r from-cyan-400 to-cyan-500 h-3 rounded-full transition-all duration-1000 shadow-lg shadow-cyan-400/30"
                       style={{ width: `${percentage}%` }}
                     ></div>
                   </div>
@@ -131,8 +135,8 @@ const Analytics: React.FC = () => {
         </div>
 
         {/* Top Categories */}
-        <div className="matrix-card p-6 rounded-lg">
-          <h3 className="text-xl font-semibold matrix-glow mb-6">Top Spending Categories</h3>
+        <div className="aeos-card aeos-interactive p-6">
+          <h3 className="text-xl font-semibold text-cyan-400 mb-6" style={{textShadow: '0 0 20px rgba(0, 255, 255, 0.6)'}}>Top Spending Categories</h3>
           <div className="space-y-4">
             {topCategories.map(([category, amount], index) => {
               const percentage = totalExpenses > 0 ? (amount / totalExpenses) * 100 : 0;
@@ -140,15 +144,15 @@ const Analytics: React.FC = () => {
               return (
                 <div key={category} className="space-y-2">
                   <div className="flex justify-between items-center">
-                    <span className="text-green-400 font-medium">{category}</span>
+                    <span className="text-cyan-400 font-medium">{category}</span>
                     <div className="text-right">
-                      <span className="matrix-glow font-bold">${amount.toFixed(2)}</span>
-                      <span className="text-green-400/60 text-sm ml-2">({percentage.toFixed(1)}%)</span>
+                      <span className="text-cyan-400 font-bold" style={{textShadow: '0 0 15px rgba(0, 255, 255, 0.5)'}}>{formatCurrency(amount)}</span>
+                      <span className="text-cyan-400/60 text-sm ml-2">({percentage.toFixed(1)}%)</span>
                     </div>
                   </div>
                   <div className="w-full bg-gray-700 rounded-full h-3">
                     <div 
-                      className="bg-gradient-to-r from-green-400 to-green-600 h-3 rounded-full transition-all duration-1000 delay-${index * 100}"
+                      className="bg-gradient-to-r from-cyan-400 to-cyan-600 h-3 rounded-full transition-all duration-1000"
                       style={{ width: `${percentage}%` }}
                     ></div>
                   </div>
@@ -160,8 +164,8 @@ const Analytics: React.FC = () => {
       </div>
 
       {/* Day of Week Analysis */}
-      <div className="matrix-card p-6 rounded-lg mb-8">
-        <h3 className="text-xl font-semibold matrix-glow mb-6">Spending by Day of Week</h3>
+      <div className="aeos-card aeos-interactive p-6 mb-8">
+        <h3 className="text-xl font-semibold text-cyan-400 mb-6" style={{textShadow: '0 0 20px rgba(0, 255, 255, 0.6)'}}>Spending by Day of Week</h3>
         <div className="grid grid-cols-1 md:grid-cols-7 gap-4">
           {Object.entries(dayOfWeekSpending).map(([day, amount]) => {
             const maxDayAmount = Math.max(...Object.values(dayOfWeekSpending));
@@ -171,7 +175,7 @@ const Analytics: React.FC = () => {
               <div key={day} className="text-center">
                 <div className="mb-2">
                   <div 
-                    className="bg-green-400 rounded-full mx-auto transition-all duration-1000"
+                    className="bg-cyan-400 rounded-full mx-auto transition-all duration-1000"
                     style={{ 
                       width: '40px', 
                       height: `${Math.max(20, percentage)}px`,
@@ -179,8 +183,8 @@ const Analytics: React.FC = () => {
                     }}
                   ></div>
                 </div>
-                <p className="text-sm font-medium text-green-400">{day.slice(0, 3)}</p>
-                <p className="text-xs matrix-glow">${amount.toFixed(0)}</p>
+                <p className="text-sm font-medium text-cyan-400">{day.slice(0, 3)}</p>
+                <p className="text-xs text-cyan-400" style={{textShadow: '0 0 10px rgba(0, 255, 255, 0.5)'}}>{formatCurrency(amount).replace(/\.\d{2}$/, '')}</p>
               </div>
             );
           })}
@@ -188,31 +192,31 @@ const Analytics: React.FC = () => {
       </div>
 
       {/* Financial Health Score */}
-      <div className="matrix-card p-6 rounded-lg">
-        <h3 className="text-xl font-semibold matrix-glow mb-6">Financial Insights</h3>
+      <div className="aeos-card aeos-interactive p-6">
+        <h3 className="text-xl font-semibold text-cyan-400 mb-6" style={{textShadow: '0 0 20px rgba(0, 255, 255, 0.6)'}}>Financial Insights</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="text-center p-4 bg-gray-800/50 rounded-lg">
-            <h4 className="text-lg font-semibold matrix-glow mb-2">Spending Frequency</h4>
-            <p className="text-2xl font-bold text-green-400 mb-2">
+          <div className="text-center p-4 bg-cyan-400/5 rounded-lg border border-cyan-400/20">
+            <h4 className="text-lg font-semibold text-cyan-400 mb-2" style={{textShadow: '0 0 15px rgba(0, 255, 255, 0.6)'}}>Spending Frequency</h4>
+            <p className="text-2xl font-bold text-cyan-400 mb-2">
               {expenses.length > 0 ? (expenses.length / Math.max(1, monthlyTrends.length)).toFixed(1) : '0'}
             </p>
-            <p className="text-sm text-green-400/60">transactions per month</p>
+            <p className="text-sm text-cyan-400/60">transactions per month</p>
           </div>
           
-          <div className="text-center p-4 bg-gray-800/50 rounded-lg">
-            <h4 className="text-lg font-semibold matrix-glow mb-2">Most Active Day</h4>
-            <p className="text-2xl font-bold text-green-400 mb-2">
+          <div className="text-center p-4 bg-cyan-400/5 rounded-lg border border-cyan-400/20">
+            <h4 className="text-lg font-semibold text-cyan-400 mb-2" style={{textShadow: '0 0 15px rgba(0, 255, 255, 0.6)'}}>Most Active Day</h4>
+            <p className="text-2xl font-bold text-cyan-400 mb-2">
               {Object.entries(dayOfWeekSpending).sort(([,a], [,b]) => b - a)[0]?.[0] || 'N/A'}
             </p>
-            <p className="text-sm text-green-400/60">highest spending day</p>
+            <p className="text-sm text-cyan-400/60">highest spending day</p>
           </div>
           
-          <div className="text-center p-4 bg-gray-800/50 rounded-lg">
-            <h4 className="text-lg font-semibold matrix-glow mb-2">Trend Direction</h4>
-            <p className={`text-2xl font-bold mb-2 ${monthlyChange <= 0 ? 'text-green-400' : 'text-red-400'}`}>
+          <div className="text-center p-4 bg-cyan-400/5 rounded-lg border border-cyan-400/20">
+            <h4 className="text-lg font-semibold text-cyan-400 mb-2" style={{textShadow: '0 0 15px rgba(0, 255, 255, 0.6)'}}>Trend Direction</h4>
+            <p className={`text-2xl font-bold mb-2 ${monthlyChange <= 0 ? 'text-cyan-400' : 'text-red-400'}`}>
               {monthlyChange <= 0 ? 'Decreasing' : 'Increasing'}
             </p>
-            <p className="text-sm text-green-400/60">monthly spending trend</p>
+            <p className="text-sm text-cyan-400/60">monthly spending trend</p>
           </div>
         </div>
       </div>

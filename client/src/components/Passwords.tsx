@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Plus, Eye, EyeOff, Copy, Edit, Trash2, Shield, AlertTriangle, Key, Lock, Check, X } from 'lucide-react';
+import { ExpenseContext } from '../context/ExpenseContext';
 
 interface BankCredential {
   id: string;
@@ -12,6 +13,7 @@ interface BankCredential {
 }
 
 const Passwords: React.FC = () => {
+  const { selectedCountry } = useContext(ExpenseContext);
   const [credentials, setCredentials] = useState<BankCredential[]>([
     {
       id: '1',
@@ -163,7 +165,7 @@ const Passwords: React.FC = () => {
 
     if (strength <= 2) return { level: 'Weak', color: 'text-red-400', bgColor: 'bg-red-400' };
     if (strength <= 4) return { level: 'Medium', color: 'text-yellow-400', bgColor: 'bg-yellow-400' };
-    return { level: 'Strong', color: 'text-emerald-400', bgColor: 'bg-emerald-400' };
+    return { level: 'Strong', color: 'text-cyan-400', bgColor: 'bg-cyan-400' };
   };
 
   return (
@@ -192,7 +194,7 @@ const Passwords: React.FC = () => {
 
       {/* Summary Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div className="glass-card p-6 rounded-2xl hover-glow transition-all duration-300">
+        <div className="aeos-card aeos-interactive aeos-parallax p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-cyan-300/70 text-sm mb-1">Total Accounts</p>
@@ -202,22 +204,22 @@ const Passwords: React.FC = () => {
           </div>
         </div>
 
-        <div className="igloo-card p-6 rounded-2xl hover-glow transition-all duration-300">
+        <div className="aeos-card aeos-interactive aeos-parallax p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-emerald-400/70 text-sm mb-1">Strong Passwords</p>
-              <p className="text-2xl font-bold text-emerald-400">
+              <p className="text-cyan-300/70 text-sm mb-1">Strong Passwords</p>
+              <p className="text-2xl font-bold text-cyan-400" style={{textShadow: '0 0 20px rgba(0, 255, 255, 0.6)'}}>
                 {credentials.filter(cred => getPasswordStrength(cred.password).level === 'Strong').length}
               </p>
             </div>
-            <Key className="text-emerald-400 opacity-60" size={24} />
+            <Key className="text-cyan-400 opacity-60" size={24} />
           </div>
         </div>
 
-        <div className="igloo-card p-6 rounded-2xl hover-glow transition-all duration-300">
+        <div className="aeos-card aeos-interactive aeos-parallax p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-emerald-400/70 text-sm mb-1">Weak Passwords</p>
+              <p className="text-cyan-300/70 text-sm mb-1">Weak Passwords</p>
               <p className="text-2xl font-bold text-red-400">
                 {credentials.filter(cred => getPasswordStrength(cred.password).level === 'Weak').length}
               </p>
@@ -226,11 +228,11 @@ const Passwords: React.FC = () => {
           </div>
         </div>
 
-        <div className="igloo-card p-6 rounded-2xl hover-glow transition-all duration-300">
+        <div className="aeos-card aeos-interactive aeos-parallax p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-emerald-400/70 text-sm mb-1">Last Updated</p>
-              <p className="text-lg font-bold igloo-glow">
+              <p className="text-cyan-300/70 text-sm mb-1">Last Updated</p>
+              <p className="text-lg font-bold text-cyan-400" style={{textShadow: '0 0 15px rgba(0, 255, 255, 0.6)'}}>
                 {credentials.length > 0 
                   ? Math.max(...credentials.map(c => new Date(c.lastUpdated).getTime())) > Date.now() - 30*24*60*60*1000 
                     ? 'Recent' 
@@ -239,7 +241,7 @@ const Passwords: React.FC = () => {
                 }
               </p>
             </div>
-            <Lock className="text-emerald-400 opacity-60" size={24} />
+            <Lock className="text-cyan-400 opacity-60" size={24} />
           </div>
         </div>
       </div>
@@ -248,7 +250,7 @@ const Passwords: React.FC = () => {
       <div className="mb-8">
         <button
           onClick={() => setShowAddForm(!showAddForm)}
-          className="igloo-button px-6 py-3 rounded-xl hover-glow flex items-center space-x-2"
+          className="aeos-button-primary px-6 py-3 rounded-xl flex items-center space-x-2"
         >
           <Plus size={20} />
           <span>Add Bank Credentials</span>
@@ -257,8 +259,8 @@ const Passwords: React.FC = () => {
 
       {/* Add Credential Form */}
       {showAddForm && (
-        <div className="igloo-card p-6 rounded-2xl mb-8">
-          <h3 className="text-xl font-semibold igloo-glow mb-4">Add Bank Credentials</h3>
+        <div className="aeos-card aeos-interactive p-6 mb-8">
+          <h3 className="text-xl font-semibold text-cyan-400 mb-4" style={{textShadow: '0 0 15px rgba(0, 255, 255, 0.6)'}}>Add Bank Credentials</h3>
           <form onSubmit={handleAddCredential} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <input
@@ -266,7 +268,7 @@ const Passwords: React.FC = () => {
                 placeholder="Bank Name (e.g., Chase Bank)"
                 value={newCredential.bankName}
                 onChange={(e) => setNewCredential({ ...newCredential, bankName: e.target.value })}
-                className="p-3 bg-slate-800/50 igloo-border rounded-xl text-emerald-400 placeholder-emerald-400/50 focus:outline-none focus:ring-2 focus:ring-emerald-400/50"
+                className="p-3 bg-cyan-400/5 border border-cyan-400/30 rounded-xl text-cyan-400 placeholder-cyan-400/50 focus:outline-none focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-400/25 transition-all"
                 required
               />
               <input
@@ -274,7 +276,7 @@ const Passwords: React.FC = () => {
                 placeholder="Website (optional)"
                 value={newCredential.website}
                 onChange={(e) => setNewCredential({ ...newCredential, website: e.target.value })}
-                className="p-3 bg-slate-800/50 igloo-border rounded-xl text-emerald-400 placeholder-emerald-400/50 focus:outline-none focus:ring-2 focus:ring-emerald-400/50"
+                className="p-3 bg-cyan-400/5 border border-cyan-400/30 rounded-xl text-cyan-400 placeholder-cyan-400/50 focus:outline-none focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-400/25 transition-all"
               />
             </div>
             
@@ -283,7 +285,7 @@ const Passwords: React.FC = () => {
               placeholder="Username/Email"
               value={newCredential.username}
               onChange={(e) => setNewCredential({ ...newCredential, username: e.target.value })}
-              className="w-full p-3 bg-slate-800/50 igloo-border rounded-xl text-emerald-400 placeholder-emerald-400/50 focus:outline-none focus:ring-2 focus:ring-emerald-400/50"
+              className="w-full p-3 bg-cyan-400/5 border border-cyan-400/30 rounded-xl text-cyan-400 placeholder-cyan-400/50 focus:outline-none focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-400/25 transition-all"
               required
             />
             
@@ -293,13 +295,13 @@ const Passwords: React.FC = () => {
                 placeholder="Password"
                 value={newCredential.password}
                 onChange={(e) => setNewCredential({ ...newCredential, password: e.target.value })}
-                className="w-full p-3 pr-24 bg-slate-800/50 igloo-border rounded-xl text-emerald-400 placeholder-emerald-400/50 focus:outline-none focus:ring-2 focus:ring-emerald-400/50"
+                className="w-full p-3 pr-24 bg-cyan-400/5 border border-cyan-400/30 rounded-xl text-cyan-400 placeholder-cyan-400/50 focus:outline-none focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-400/25 transition-all"
                 required
               />
               <button
                 type="button"
                 onClick={generatePassword}
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 px-3 py-1 text-xs igloo-button rounded hover-glow"
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 px-3 py-1 text-xs aeos-button-primary rounded"
               >
                 Generate
               </button>
@@ -307,9 +309,9 @@ const Passwords: React.FC = () => {
 
             {newCredential.password && (
               <div className="flex items-center space-x-4">
-                <span className="text-sm text-emerald-400/70">Password Strength:</span>
+                <span className="text-sm text-cyan-400/70">Password Strength:</span>
                 <div className="flex items-center space-x-2">
-                  <div className={`px-2 py-1 rounded text-xs font-semibold ${getPasswordStrength(newCredential.password).color} bg-slate-800/50`}>
+                  <div className={`px-2 py-1 rounded text-xs font-semibold ${getPasswordStrength(newCredential.password).color} bg-cyan-400/10`}>
                     {getPasswordStrength(newCredential.password).level}
                   </div>
                 </div>
@@ -320,20 +322,20 @@ const Passwords: React.FC = () => {
               placeholder="Notes (Optional) - Security questions, account details, etc."
               value={newCredential.notes}
               onChange={(e) => setNewCredential({ ...newCredential, notes: e.target.value })}
-              className="w-full p-3 bg-slate-800/50 igloo-border rounded-xl text-emerald-400 placeholder-emerald-400/50 focus:outline-none focus:ring-2 focus:ring-emerald-400/50 h-24 resize-none"
+              className="w-full p-3 bg-cyan-400/5 border border-cyan-400/30 rounded-xl text-cyan-400 placeholder-cyan-400/50 focus:outline-none focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-400/25 transition-all h-24 resize-none"
             />
             
             <div className="flex space-x-4">
               <button
                 type="submit"
-                className="flex-1 igloo-button py-3 rounded-xl hover-glow font-semibold"
+                className="flex-1 aeos-button-primary py-3 rounded-xl font-semibold"
               >
                 Save Credentials
               </button>
               <button
                 type="button"
                 onClick={() => setShowAddForm(false)}
-                className="flex-1 px-6 py-3 bg-slate-700 text-slate-300 rounded-xl hover:bg-slate-600 transition-colors"
+                className="flex-1 aeos-button py-3 rounded-xl"
               >
                 Cancel
               </button>
@@ -350,22 +352,22 @@ const Passwords: React.FC = () => {
           const isEditing = editingCredential === credential.id;
 
           return (
-            <div key={credential.id} className="igloo-card p-6 rounded-2xl hover-glow transition-all duration-300">
+            <div key={credential.id} className="aeos-card aeos-interactive aeos-parallax p-6">
               {isEditing ? (
                 <form onSubmit={handleEditSubmit} className="space-y-4">
                   <div className="flex items-start justify-between mb-4">
-                    <h3 className="text-lg font-semibold text-emerald-400">Edit Credentials</h3>
+                    <h3 className="text-lg font-semibold text-cyan-400" style={{textShadow: '0 0 15px rgba(0, 255, 255, 0.6)'}}>Edit Credentials</h3>
                     <div className="flex space-x-2">
                       <button
                         type="submit"
-                        className="p-2 text-emerald-400/70 hover:text-emerald-400 hover:bg-emerald-400/10 rounded-xl transition-colors"
+                        className="p-2 text-cyan-400/70 hover:text-cyan-400 hover:bg-cyan-400/10 rounded-xl transition-colors"
                       >
                         <Check size={16} />
                       </button>
                       <button
                         type="button"
                         onClick={cancelEdit}
-                        className="p-2 text-slate-400/70 hover:text-slate-400 hover:bg-slate-400/10 rounded-xl transition-colors"
+                        className="p-2 text-cyan-400/70 hover:text-cyan-400 hover:bg-cyan-400/10 rounded-xl transition-colors"
                       >
                         <X size={16} />
                       </button>
@@ -378,7 +380,7 @@ const Passwords: React.FC = () => {
                       placeholder="Bank Name"
                       value={editFormData.bankName}
                       onChange={(e) => setEditFormData({ ...editFormData, bankName: e.target.value })}
-                      className="p-3 bg-slate-800/50 igloo-border rounded-xl text-emerald-400 placeholder-emerald-400/50 focus:outline-none focus:ring-2 focus:ring-emerald-400/50"
+                      className="p-3 bg-cyan-400/5 border border-cyan-400/30 rounded-xl text-cyan-400 placeholder-cyan-400/50 focus:outline-none focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-400/25 transition-all"
                       required
                     />
                     <input
@@ -386,7 +388,7 @@ const Passwords: React.FC = () => {
                       placeholder="Website"
                       value={editFormData.website}
                       onChange={(e) => setEditFormData({ ...editFormData, website: e.target.value })}
-                      className="p-3 bg-slate-800/50 igloo-border rounded-xl text-emerald-400 placeholder-emerald-400/50 focus:outline-none focus:ring-2 focus:ring-emerald-400/50"
+                      className="p-3 bg-cyan-400/5 border border-cyan-400/30 rounded-xl text-cyan-400 placeholder-cyan-400/50 focus:outline-none focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-400/25 transition-all"
                     />
                   </div>
 
@@ -395,7 +397,7 @@ const Passwords: React.FC = () => {
                     placeholder="Username/Email"
                     value={editFormData.username}
                     onChange={(e) => setEditFormData({ ...editFormData, username: e.target.value })}
-                    className="w-full p-3 bg-slate-800/50 igloo-border rounded-xl text-emerald-400 placeholder-emerald-400/50 focus:outline-none focus:ring-2 focus:ring-emerald-400/50"
+                    className="w-full p-3 bg-cyan-400/5 border border-cyan-400/30 rounded-xl text-cyan-400 placeholder-cyan-400/50 focus:outline-none focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-400/25 transition-all"
                     required
                   />
 
@@ -405,13 +407,13 @@ const Passwords: React.FC = () => {
                       placeholder="Password"
                       value={editFormData.password}
                       onChange={(e) => setEditFormData({ ...editFormData, password: e.target.value })}
-                      className="w-full p-3 pr-24 bg-slate-800/50 igloo-border rounded-xl text-emerald-400 placeholder-emerald-400/50 focus:outline-none focus:ring-2 focus:ring-emerald-400/50"
+                      className="w-full p-3 pr-24 bg-cyan-400/5 border border-cyan-400/30 rounded-xl text-cyan-400 placeholder-cyan-400/50 focus:outline-none focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-400/25 transition-all"
                       required
                     />
                     <button
                       type="button"
                       onClick={generatePassword}
-                      className="absolute right-2 top-1/2 transform -translate-y-1/2 px-3 py-1 text-xs igloo-button rounded hover-glow"
+                      className="absolute right-2 top-1/2 transform -translate-y-1/2 px-3 py-1 text-xs aeos-button-primary rounded"
                     >
                       Generate
                     </button>
@@ -421,26 +423,26 @@ const Passwords: React.FC = () => {
                     placeholder="Notes"
                     value={editFormData.notes}
                     onChange={(e) => setEditFormData({ ...editFormData, notes: e.target.value })}
-                    className="w-full p-3 bg-slate-800/50 igloo-border rounded-xl text-emerald-400 placeholder-emerald-400/50 focus:outline-none focus:ring-2 focus:ring-emerald-400/50 h-20 resize-none"
+                    className="w-full p-3 bg-cyan-400/5 border border-cyan-400/30 rounded-xl text-cyan-400 placeholder-cyan-400/50 focus:outline-none focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-400/25 transition-all h-20 resize-none"
                   />
                 </form>
               ) : (
                 <>
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center space-x-3">
-                      <div className="w-12 h-12 bg-emerald-400/10 rounded-xl flex items-center justify-center">
-                        <Shield className="text-emerald-400" size={24} />
+                      <div className="w-12 h-12 bg-cyan-400/10 rounded-xl flex items-center justify-center">
+                        <Shield className="text-cyan-400" size={24} />
                       </div>
                       <div>
-                        <h3 className="text-lg font-semibold text-emerald-400">{credential.bankName}</h3>
+                        <h3 className="text-lg font-semibold text-cyan-400">{credential.bankName}</h3>
                         {credential.website && (
-                          <p className="text-sm text-emerald-400/60">{credential.website}</p>
+                          <p className="text-sm text-cyan-400/60">{credential.website}</p>
                         )}
                         <div className="flex items-center space-x-2 mt-1">
-                          <div className={`px-2 py-1 rounded text-xs font-semibold ${passwordStrength.color} bg-slate-800/50`}>
+                          <div className={`px-2 py-1 rounded text-xs font-semibold ${passwordStrength.color} bg-cyan-400/10`}>
                             {passwordStrength.level}
                           </div>
-                          <span className="text-xs text-emerald-400/50">
+                          <span className="text-xs text-cyan-400/50">
                             Updated: {credential.lastUpdated}
                           </span>
                         </div>
@@ -450,7 +452,7 @@ const Passwords: React.FC = () => {
                     <div className="flex space-x-2">
                       <button
                         onClick={() => startEdit(credential)}
-                        className="p-2 text-emerald-400/70 hover:text-emerald-400 hover:bg-emerald-400/10 rounded-xl transition-colors"
+                        className="p-2 text-cyan-400/70 hover:text-cyan-400 hover:bg-cyan-400/10 rounded-xl transition-colors"
                       >
                         <Edit size={16} />
                       </button>
@@ -465,37 +467,37 @@ const Passwords: React.FC = () => {
 
                   <div className="space-y-4">
                     {/* Username */}
-                    <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-xl">
+                    <div className="flex items-center justify-between p-3 bg-cyan-400/5 rounded-xl border border-cyan-400/20">
                       <div>
-                        <p className="text-sm text-emerald-400/70 mb-1">Username/Email</p>
-                        <p className="font-mono text-emerald-400">{credential.username}</p>
+                        <p className="text-sm text-cyan-400/70 mb-1">Username/Email</p>
+                        <p className="font-mono text-cyan-400">{credential.username}</p>
                       </div>
                       <button
                         onClick={() => copyToClipboard(credential.username, 'username')}
-                        className="p-2 text-emerald-400/70 hover:text-emerald-400 hover:bg-emerald-400/10 rounded-xl transition-colors"
+                        className="p-2 text-cyan-400/70 hover:text-cyan-400 hover:bg-cyan-400/10 rounded-xl transition-colors"
                       >
                         <Copy size={16} />
                       </button>
                     </div>
 
                     {/* Password */}
-                    <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-xl">
+                    <div className="flex items-center justify-between p-3 bg-cyan-400/5 rounded-xl border border-cyan-400/20">
                       <div className="flex-1">
-                        <p className="text-sm text-emerald-400/70 mb-1">Password</p>
-                        <p className="font-mono text-emerald-400">
+                        <p className="text-sm text-cyan-400/70 mb-1">Password</p>
+                        <p className="font-mono text-cyan-400">
                           {isVisible ? credential.password : '••••••••••••••••'}
                         </p>
                       </div>
                       <div className="flex space-x-2">
                         <button
                           onClick={() => togglePasswordVisibility(credential.id)}
-                          className="p-2 text-emerald-400/70 hover:text-emerald-400 hover:bg-emerald-400/10 rounded-xl transition-colors"
+                          className="p-2 text-cyan-400/70 hover:text-cyan-400 hover:bg-cyan-400/10 rounded-xl transition-colors"
                         >
                           {isVisible ? <EyeOff size={16} /> : <Eye size={16} />}
                         </button>
                         <button
                           onClick={() => copyToClipboard(credential.password, 'password')}
-                          className="p-2 text-emerald-400/70 hover:text-emerald-400 hover:bg-emerald-400/10 rounded-xl transition-colors"
+                          className="p-2 text-cyan-400/70 hover:text-cyan-400 hover:bg-cyan-400/10 rounded-xl transition-colors"
                         >
                           <Copy size={16} />
                         </button>
@@ -504,9 +506,9 @@ const Passwords: React.FC = () => {
 
                     {/* Notes */}
                     {credential.notes && (
-                      <div className="p-3 bg-slate-800/30 rounded-xl">
-                        <p className="text-sm text-emerald-400/70 mb-1">Notes</p>
-                        <p className="text-emerald-400 text-sm">{credential.notes}</p>
+                      <div className="p-3 bg-cyan-400/5 rounded-xl border border-cyan-400/20">
+                        <p className="text-sm text-cyan-400/70 mb-1">Notes</p>
+                        <p className="text-cyan-400 text-sm">{credential.notes}</p>
                       </div>
                     )}
                   </div>
@@ -519,15 +521,15 @@ const Passwords: React.FC = () => {
 
       {/* Empty State */}
       {credentials.length === 0 && !showAddForm && (
-        <div className="igloo-card p-12 rounded-2xl text-center">
-          <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-emerald-400/10 flex items-center justify-center">
-            <Lock className="text-emerald-400 opacity-40" size={32} />
+        <div className="aeos-card aeos-interactive p-12 text-center">
+          <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-cyan-400/10 flex items-center justify-center">
+            <Lock className="text-cyan-400 opacity-40" size={32} />
           </div>
-          <h3 className="text-xl font-semibold igloo-glow mb-2">No bank credentials saved yet</h3>
-          <p className="text-emerald-400/60 mb-6">Add your first bank credentials to start organizing!</p>
+          <h3 className="text-xl font-semibold text-cyan-400 mb-2" style={{textShadow: '0 0 15px rgba(0, 255, 255, 0.6)'}}>No bank credentials saved yet</h3>
+          <p className="text-cyan-400/60 mb-6">Add your first bank credentials to start organizing!</p>
           <button
             onClick={() => setShowAddForm(true)}
-            className="igloo-button px-6 py-3 rounded-xl hover-glow"
+            className="aeos-button-primary px-6 py-3 rounded-xl"
           >
             Add First Credentials
           </button>
@@ -535,22 +537,22 @@ const Passwords: React.FC = () => {
       )}
 
       {/* Security Tips */}
-      <div className="igloo-card p-6 rounded-2xl mt-8">
-        <h3 className="text-xl font-semibold igloo-glow mb-4">Security Best Practices</h3>
+      <div className="aeos-card aeos-interactive p-6 mt-8">
+        <h3 className="text-xl font-semibold text-cyan-400 mb-4" style={{textShadow: '0 0 20px rgba(0, 255, 255, 0.6)'}}>Security Best Practices</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-3">
             <div className="flex items-start space-x-3">
-              <Shield className="text-emerald-400 mt-1 flex-shrink-0" size={16} />
+              <Shield className="text-cyan-400 mt-1 flex-shrink-0" size={16} />
               <div>
-                <h4 className="font-semibold text-emerald-400 text-sm">Use Strong Passwords</h4>
-                <p className="text-emerald-400/70 text-xs">At least 12 characters with mixed case, numbers, and symbols</p>
+                <h4 className="font-semibold text-cyan-400 text-sm">Use Strong Passwords</h4>
+                <p className="text-cyan-400/70 text-xs">At least 12 characters with mixed case, numbers, and symbols</p>
               </div>
             </div>
             <div className="flex items-start space-x-3">
-              <Key className="text-emerald-400 mt-1 flex-shrink-0" size={16} />
+              <Key className="text-cyan-400 mt-1 flex-shrink-0" size={16} />
               <div>
-                <h4 className="font-semibold text-emerald-400 text-sm">Enable 2FA</h4>
-                <p className="text-emerald-400/70 text-xs">Always enable two-factor authentication when available</p>
+                <h4 className="font-semibold text-cyan-400 text-sm">Enable 2FA</h4>
+                <p className="text-cyan-400/70 text-xs">Always enable two-factor authentication when available</p>
               </div>
             </div>
           </div>
@@ -559,14 +561,14 @@ const Passwords: React.FC = () => {
               <AlertTriangle className="text-yellow-400 mt-1 flex-shrink-0" size={16} />
               <div>
                 <h4 className="font-semibold text-yellow-400 text-sm">Regular Updates</h4>
-                <p className="text-emerald-400/70 text-xs">Update passwords regularly, especially after security breaches</p>
+                <p className="text-cyan-400/70 text-xs">Update passwords regularly, especially after security breaches</p>
               </div>
             </div>
             <div className="flex items-start space-x-3">
-              <Lock className="text-emerald-400 mt-1 flex-shrink-0" size={16} />
+              <Lock className="text-cyan-400 mt-1 flex-shrink-0" size={16} />
               <div>
-                <h4 className="font-semibold text-emerald-400 text-sm">Secure Storage</h4>
-                <p className="text-emerald-400/70 text-xs">Consider using dedicated password managers for maximum security</p>
+                <h4 className="font-semibold text-cyan-400 text-sm">Secure Storage</h4>
+                <p className="text-cyan-400/70 text-xs">Consider using dedicated password managers for maximum security</p>
               </div>
             </div>
           </div>
