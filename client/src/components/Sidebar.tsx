@@ -2,9 +2,7 @@ import React from 'react';
 import { 
   BarChart3, 
   CreditCard, 
-  DollarSign, 
   FileText, 
-  Home, 
   Lock, 
   PieChart, 
   TrendingUp,
@@ -20,7 +18,6 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView }) => {
   const menuItems = [
-    { id: 'overview', label: 'Overview', icon: Home },
     { id: 'transactions', label: 'Transactions', icon: FileText },
     { id: 'budgets', label: 'Budgets', icon: PieChart },
     { id: 'analytics', label: 'Analytics', icon: BarChart3 },
@@ -74,7 +71,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView }) => {
           <div className="w-8 h-8 mx-auto mb-2 rounded-full bg-cyan-400/10 flex items-center justify-center" style={{
             boxShadow: '0 0 15px rgba(0, 255, 255, 0.4)'
           }}>
-            <DollarSign size={16} className="text-cyan-400" />
+            <Calendar size={16} className="text-cyan-400" />
           </div>
           <p className="text-xs text-cyan-300/80 font-medium font-mono">AEOS v2.0</p>
           <p className="text-xs text-cyan-400/60">Secure • Modern • Intuitive</p>

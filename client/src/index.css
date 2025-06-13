@@ -206,6 +206,57 @@ input:focus, select:focus, textarea:focus {
   box-shadow: 0 0 0 3px rgba(0, 255, 255, 0.1), 0 0 20px rgba(0, 255, 255, 0.2);
 }
 
+/* Fix dropdown/select styling to match theme */
+select {
+  background: var(--glass-bg) !important;
+  color: var(--neon-cyan) !important;
+  border: 1px solid var(--border-color) !important;
+  backdrop-filter: blur(10px);
+}
+
+select option {
+  background: var(--primary-bg) !important;
+  color: var(--neon-cyan) !important;
+  border: none !important;
+  padding: 8px 12px;
+}
+
+select option:hover, select option:focus, select option:checked {
+  background: rgba(0, 255, 255, 0.1) !important;
+  color: var(--neon-cyan) !important;
+}
+
+/* Date input styling */
+input[type="date"] {
+  background: var(--glass-bg) !important;
+  color: var(--neon-cyan) !important;
+  border: 1px solid var(--border-color) !important;
+  backdrop-filter: blur(10px);
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1) sepia(1) saturate(5) hue-rotate(175deg);
+  cursor: pointer;
+}
+
+input[type="date"]::-webkit-datetime-edit {
+  color: var(--neon-cyan);
+}
+
+input[type="date"]::-webkit-datetime-edit-fields-wrapper {
+  color: var(--neon-cyan);
+}
+
+input[type="date"]::-webkit-datetime-edit-text {
+  color: var(--neon-cyan);
+}
+
+input[type="date"]::-webkit-datetime-edit-month-field,
+input[type="date"]::-webkit-datetime-edit-day-field,
+input[type="date"]::-webkit-datetime-edit-year-field {
+  color: var(--neon-cyan);
+}
+
 /* Improved table styling */
 table {
   border-collapse: separate;

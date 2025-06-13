@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { Plus, TrendingDown, Calculator, Calendar, AlertTriangle, CheckCircle } from 'lucide-react';
+import { Plus, TrendingDown, Calculator, Calendar, AlertTriangle, CheckCircle, Edit, Check, X } from 'lucide-react';
 import { ExpenseContext } from '../context/ExpenseContext';
 
 interface Debt {
@@ -42,6 +42,17 @@ const Debt: React.FC = () => {
   ]);
 
   const [showAddForm, setShowAddForm] = useState(false);
+  const [editingDebt, setEditingDebt] = useState<string | null>(null);
+  const [editFormData, setEditFormData] = useState({
+    name: '',
+    totalAmount: '',
+    currentBalance: '',
+    interestRate: '',
+    monthlyPayment: '',
+    minimumPayment: '',
+    dueDate: '',
+    type: 'credit_card' as const
+  });
   const [newDebt, setNewDebt] = useState({
     name: '',
     totalAmount: '',
@@ -84,6 +95,56 @@ const Debt: React.FC = () => {
       });
       setShowAddForm(false);
     }
+  };
+
+  const startEdit = (debt: Debt) => {
+    setEditingDebt(debt.id);
+    setEditFormData({
+      name: debt.name,
+      totalAmount: debt.totalAmount.toString(),
+      currentBalance: debt.currentBalance.toString(),
+      interestRate: debt.interestRate.toString(),
+      monthlyPayment: debt.monthlyPayment.toString(),
+      minimumPayment: debt.minimumPayment.toString(),
+      dueDate: debt.dueDate,
+      type: debt.type
+    });
+  };
+
+  const handleEditSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (editingDebt && editFormData.name && editFormData.totalAmount && editFormData.currentBalance && editFormData.monthlyPayment) {
+      setDebts(prev => prev.map(debt => 
+        debt.id === editingDebt 
+          ? {
+              ...debt,
+              name: editFormData.name,
+              totalAmount: parseFloat(editFormData.totalAmount),
+              currentBalance: parseFloat(editFormData.currentBalance),
+              interestRate: parseFloat(editFormData.interestRate) || 0,
+              monthlyPayment: parseFloat(editFormData.monthlyPayment),
+              minimumPayment: parseFloat(editFormData.minimumPayment) || parseFloat(editFormData.monthlyPayment),
+              dueDate: editFormData.dueDate,
+              type: editFormData.type
+            }
+          : debt
+      ));
+      setEditingDebt(null);
+    }
+  };
+
+  const cancelEdit = () => {
+    setEditingDebt(null);
+    setEditFormData({
+      name: '',
+      totalAmount: '',
+      currentBalance: '',
+      interestRate: '',
+      monthlyPayment: '',
+      minimumPayment: '',
+      dueDate: '',
+      type: 'credit_card'
+    });
   };
 
   const calculatePayoffTime = (debt: Debt) => {
@@ -305,71 +366,168 @@ const Debt: React.FC = () => {
           const status = getDebtStatus(debt);
           const payoffTime = calculatePayoffTime(debt);
           const totalInterest = calculateTotalInterest(debt);
+          const isEditing = editingDebt === debt.id;
 
           return (
             <div key={debt.id} className="aeos-card aeos-interactive aeos-parallax p-6">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center space-x-3">
-                  <span className="text-2xl">{getDebtTypeIcon(debt.type)}</span>
-                  <div>
-                    <h3 className="text-lg font-semibold text-cyan-400">{debt.name}</h3>
-                    <p className="text-sm text-cyan-400/60 capitalize">{debt.type.replace('_', ' ')}</p>
+              {isEditing ? (
+                <form onSubmit={handleEditSubmit} className="space-y-4">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-semibold text-cyan-400">Edit Debt</h3>
+                    <div className="flex space-x-2">
+                      <button
+                        type="submit"
+                        className="p-2 text-cyan-400/70 hover:text-cyan-400 hover:bg-cyan-400/10 rounded-lg transition-colors"
+                      >
+                        <Check size={16} />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={cancelEdit}
+                        className="p-2 text-cyan-400/70 hover:text-cyan-400 hover:bg-cyan-400/10 rounded-lg transition-colors"
+                      >
+                        <X size={16} />
+                      </button>
+                    </div>
                   </div>
-                </div>
-                <div className={`px-3 py-1 rounded-full text-xs font-semibold ${status.color} bg-cyan-400/10`}>
-                  {status.status.replace('_', ' ').toUpperCase()}
-                </div>
-              </div>
 
-              {/* Progress Bar */}
-              <div className="mb-4">
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm text-cyan-400/70">Progress</span>
-                  <span className={`text-sm font-semibold ${status.color}`}>
-                    {progress.toFixed(1)}% paid off
-                  </span>
-                </div>
-                <div className="w-full bg-gray-700 rounded-full h-3">
-                  <div 
-                    className={`h-3 rounded-full transition-all duration-500 ${status.bgColor}`}
-                    style={{ width: `${progress}%` }}
-                  ></div>
-                </div>
-              </div>
-
-              {/* Debt Details */}
-              <div className="grid grid-cols-2 gap-4 mb-4">
-                <div>
-                  <p className="text-cyan-400/70 text-sm">Current Balance</p>
-                  <p className="text-lg font-bold text-red-400">{formatCurrency(debt.currentBalance)}</p>
-                </div>
-                <div>
-                  <p className="text-cyan-400/70 text-sm">Monthly Payment</p>
-                  <p className="text-lg font-bold text-cyan-400" style={{textShadow: '0 0 15px rgba(0, 255, 255, 0.6)'}}>{formatCurrency(debt.monthlyPayment)}</p>
-                </div>
-                <div>
-                  <p className="text-cyan-400/70 text-sm">Interest Rate</p>
-                  <p className="text-lg font-bold text-yellow-400">{debt.interestRate.toFixed(2)}%</p>
-                </div>
-                <div>
-                  <p className="text-cyan-400/70 text-sm">Payoff Time</p>
-                  <p className="text-lg font-bold text-blue-400">{payoffTime}</p>
-                </div>
-              </div>
-
-              {/* Additional Info */}
-              <div className="pt-4 border-t border-cyan-400/20">
-                <div className="flex justify-between items-center text-sm">
-                  <span className="text-cyan-400/70">Total Interest:</span>
-                  <span className="font-semibold text-red-400">{formatCurrency(totalInterest)}</span>
-                </div>
-                {debt.dueDate && (
-                  <div className="flex justify-between items-center text-sm mt-1">
-                    <span className="text-cyan-400/70">Next Due:</span>
-                    <span className="font-semibold text-cyan-400">{debt.dueDate}</span>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <input
+                      type="text"
+                      placeholder="Debt Name"
+                      value={editFormData.name}
+                      onChange={(e) => setEditFormData({ ...editFormData, name: e.target.value })}
+                      className="p-2 bg-cyan-400/5 border border-cyan-400/30 rounded-lg text-cyan-400 text-sm focus:outline-none focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-400/25 transition-all"
+                      required
+                    />
+                    <select
+                      value={editFormData.type}
+                      onChange={(e) => setEditFormData({ ...editFormData, type: e.target.value as any })}
+                      className="p-2 bg-cyan-400/5 border border-cyan-400/30 rounded-lg text-cyan-400 text-sm focus:outline-none focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-400/25 transition-all"
+                    >
+                      <option value="credit_card">Credit Card</option>
+                      <option value="student_loan">Student Loan</option>
+                      <option value="mortgage">Mortgage</option>
+                      <option value="personal_loan">Personal Loan</option>
+                      <option value="other">Other</option>
+                    </select>
+                    <input
+                      type="number"
+                      placeholder="Total Amount"
+                      step="0.01"
+                      value={editFormData.totalAmount}
+                      onChange={(e) => setEditFormData({ ...editFormData, totalAmount: e.target.value })}
+                      className="p-2 bg-cyan-400/5 border border-cyan-400/30 rounded-lg text-cyan-400 text-sm focus:outline-none focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-400/25 transition-all"
+                      required
+                    />
+                    <input
+                      type="number"
+                      placeholder="Current Balance"
+                      step="0.01"
+                      value={editFormData.currentBalance}
+                      onChange={(e) => setEditFormData({ ...editFormData, currentBalance: e.target.value })}
+                      className="p-2 bg-cyan-400/5 border border-cyan-400/30 rounded-lg text-cyan-400 text-sm focus:outline-none focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-400/25 transition-all"
+                      required
+                    />
+                    <input
+                      type="number"
+                      placeholder="Interest Rate (%)"
+                      step="0.01"
+                      value={editFormData.interestRate}
+                      onChange={(e) => setEditFormData({ ...editFormData, interestRate: e.target.value })}
+                      className="p-2 bg-cyan-400/5 border border-cyan-400/30 rounded-lg text-cyan-400 text-sm focus:outline-none focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-400/25 transition-all"
+                    />
+                    <input
+                      type="number"
+                      placeholder="Monthly Payment"
+                      step="0.01"
+                      value={editFormData.monthlyPayment}
+                      onChange={(e) => setEditFormData({ ...editFormData, monthlyPayment: e.target.value })}
+                      className="p-2 bg-cyan-400/5 border border-cyan-400/30 rounded-lg text-cyan-400 text-sm focus:outline-none focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-400/25 transition-all"
+                      required
+                    />
                   </div>
-                )}
-              </div>
+                  <input
+                    type="date"
+                    value={editFormData.dueDate}
+                    onChange={(e) => setEditFormData({ ...editFormData, dueDate: e.target.value })}
+                    className="w-full p-2 bg-cyan-400/5 border border-cyan-400/30 rounded-lg text-cyan-400 text-sm focus:outline-none focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-400/25 transition-all"
+                  />
+                </form>
+              ) : (
+                <>
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center space-x-3">
+                      <span className="text-2xl">{getDebtTypeIcon(debt.type)}</span>
+                      <div>
+                        <h3 className="text-lg font-semibold text-cyan-400">{debt.name}</h3>
+                        <p className="text-sm text-cyan-400/60 capitalize">{debt.type.replace('_', ' ')}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <button
+                        onClick={() => startEdit(debt)}
+                        className="p-2 text-cyan-400/70 hover:text-cyan-400 hover:bg-cyan-400/10 rounded-lg transition-colors"
+                      >
+                        <Edit size={16} />
+                      </button>
+                      <div className={`px-3 py-1 rounded-full text-xs font-semibold ${status.color} bg-cyan-400/10`}>
+                        {status.status.replace('_', ' ').toUpperCase()}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Progress Bar */}
+                  <div className="mb-4">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-sm text-cyan-400/70">Progress</span>
+                      <span className={`text-sm font-semibold ${status.color}`}>
+                        {progress.toFixed(1)}% paid off
+                      </span>
+                    </div>
+                    <div className="w-full bg-gray-700 rounded-full h-3">
+                      <div 
+                        className={`h-3 rounded-full transition-all duration-500 ${status.bgColor}`}
+                        style={{ width: `${progress}%` }}
+                      ></div>
+                    </div>
+                  </div>
+
+                  {/* Debt Details */}
+                  <div className="grid grid-cols-2 gap-4 mb-4">
+                    <div>
+                      <p className="text-cyan-400/70 text-sm">Current Balance</p>
+                      <p className="text-lg font-bold text-red-400">{formatCurrency(debt.currentBalance)}</p>
+                    </div>
+                    <div>
+                      <p className="text-cyan-400/70 text-sm">Monthly Payment</p>
+                      <p className="text-lg font-bold text-cyan-400" style={{textShadow: '0 0 15px rgba(0, 255, 255, 0.6)'}}>{formatCurrency(debt.monthlyPayment)}</p>
+                    </div>
+                    <div>
+                      <p className="text-cyan-400/70 text-sm">Interest Rate</p>
+                      <p className="text-lg font-bold text-yellow-400">{debt.interestRate.toFixed(2)}%</p>
+                    </div>
+                    <div>
+                      <p className="text-cyan-400/70 text-sm">Payoff Time</p>
+                      <p className="text-lg font-bold text-blue-400">{payoffTime}</p>
+                    </div>
+                  </div>
+
+                  {/* Additional Info */}
+                  <div className="pt-4 border-t border-cyan-400/20">
+                    <div className="flex justify-between items-center text-sm">
+                      <span className="text-cyan-400/70">Total Interest:</span>
+                      <span className="font-semibold text-red-400">{formatCurrency(totalInterest)}</span>
+                    </div>
+                    {debt.dueDate && (
+                      <div className="flex justify-between items-center text-sm mt-1">
+                        <span className="text-cyan-400/70">Next Due:</span>
+                        <span className="font-semibold text-cyan-400">{debt.dueDate}</span>
+                      </div>
+                    )}
+                  </div>
+                </>
+              )}
             </div>
           );
         })}

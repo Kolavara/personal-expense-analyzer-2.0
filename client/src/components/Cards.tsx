@@ -203,6 +203,13 @@ const Cards: React.FC = () => {
                 onChange={(e) => setNewCard({ ...newCard, cardNumber: e.target.value })}
                 className="w-full p-3 bg-cyan-400/5 border border-cyan-400/30 rounded-xl text-cyan-400 placeholder-cyan-400/50 focus:outline-none focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-400/25 transition-all"
               />
+              <input
+                type="text"
+                placeholder="Expiry Date (MM/YY)"
+                value={newCard.expiryDate}
+                onChange={(e) => setNewCard({ ...newCard, expiryDate: e.target.value })}
+                className="w-full p-3 bg-cyan-400/5 border border-cyan-400/30 rounded-xl text-cyan-400 placeholder-cyan-400/50 focus:outline-none focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-400/25 transition-all"
+              />
               <div className="grid grid-cols-2 gap-4">
                 <select
                   value={newCard.cardType}
@@ -292,6 +299,13 @@ const Cards: React.FC = () => {
                     className="w-full p-2 bg-cyan-400/5 border border-cyan-400/30 rounded-xl text-cyan-400 text-sm focus:outline-none focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-400/25 transition-all"
                     placeholder="Balance"
                     required
+                  />
+                  <input
+                    type="text"
+                    value={editFormData.expiryDate}
+                    onChange={(e) => setEditFormData({ ...editFormData, expiryDate: e.target.value })}
+                    className="w-full p-2 bg-cyan-400/5 border border-cyan-400/30 rounded-xl text-cyan-400 text-sm focus:outline-none focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-400/25 transition-all"
+                    placeholder="Expiry Date (MM/YY)"
                   />
                   <div className="flex space-x-2">
                     <button

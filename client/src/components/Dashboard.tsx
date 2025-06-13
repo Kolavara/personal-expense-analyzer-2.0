@@ -49,12 +49,9 @@ const Dashboard: React.FC = () => {
 
       {/* Navigation Tabs */}
       <div className="flex space-x-4">
-        <button className="px-6 py-3 aeos-button-primary rounded-lg font-medium">
-          Overview
-        </button>
         <button 
           onClick={() => setShowAddModal(true)}
-          className="px-6 py-3 aeos-button rounded-lg font-medium flex items-center space-x-2"
+          className="px-6 py-3 aeos-button-primary rounded-lg font-medium flex items-center space-x-2"
         >
           <Plus size={18} />
           <span>Add Expense</span>
