@@ -1,4 +1,5 @@
-import React, { createContext, useState, ReactNode } from 'react';
+import React, { createContext, useState, ReactNode, useEffect } from 'react';
+import { currencyService } from '../services/currencyService';
 
 export interface Expense {
   id: string;
@@ -7,6 +8,8 @@ export interface Expense {
   category: string;
   date: string;
   cardId?: string;
+  originalAmount?: number;
+  originalCurrency?: string;
 }
 
 export interface Category {
@@ -22,6 +25,8 @@ export interface Card {
   expiryDate: string;
   cardType: 'visa' | 'mastercard' | 'amex' | 'discover';
   color: string;
+  originalBalance?: number;
+  originalCurrency?: string;
 }
 
 export interface Country {
@@ -42,6 +47,7 @@ interface ExpenseContextType {
   totalExpenses: number;
   selectedCountry: Country;
   countries: Country[];
+  isConverting: boolean;
   addExpense: (expense: Expense) => void;
   deleteExpense: (id: string) => void;
   updateExpense: (id: string, expense: Partial<Expense>) => void;
@@ -114,6 +120,7 @@ export const ExpenseContext = createContext<ExpenseContextType>({
   totalExpenses: 0,
   selectedCountry: defaultCountries[0],
   countries: [],
+  isConverting: false,
   addExpense: () => {},
   deleteExpense: () => {},
   updateExpense: () => {},
@@ -209,9 +216,50 @@ export const ExpenseProvider: React.FC<ExpenseProviderProps> = ({ children }) =>
   const [expenses, setExpenses] = useState<Expense[]>(sampleExpenses);
   const [categories] = useState<Category[]>(defaultCategories);
   const [cards, setCards] = useState<Card[]>(defaultCards);
-  const [selectedCountry, setSelectedCountry] = useState<Country>(defaultCountries[0]);
+  const [selectedCountry, setSelectedCountryState] = useState<Country>(defaultCountries[0]);
+  const [isConverting, setIsConverting] = useState(false);
+  const [previousCurrency, setPreviousCurrency] = useState<string>('USD');
 
   const totalExpenses = expenses.reduce((sum, expense) => sum + expense.amount, 0);
+
+  // Handle currency conversion when country changes
+  const setSelectedCountry = async (country: Country) => {
+    if (country.currency.code === selectedCountry.currency.code) {
+      return; // No change needed
+    }
+
+    setIsConverting(true);
+    
+    try {
+      const fromCurrency = selectedCountry.currency.code;
+      const toCurrency = country.currency.code;
+
+      // Convert expenses
+      const convertedExpenses = await currencyService.convertExpenseData(
+        expenses, 
+        fromCurrency, 
+        toCurrency
+      );
+
+      // Convert card balances
+      const convertedCards = await currencyService.convertCardData(
+        cards, 
+        fromCurrency, 
+        toCurrency
+      );
+
+      setExpenses(convertedExpenses);
+      setCards(convertedCards);
+      setPreviousCurrency(fromCurrency);
+      setSelectedCountryState(country);
+    } catch (error) {
+      console.error('Currency conversion failed:', error);
+      // Still update the country even if conversion fails
+      setSelectedCountryState(country);
+    } finally {
+      setIsConverting(false);
+    }
+  };
 
   const addExpense = (expense: Expense) => {
     setExpenses(prev => [...prev, expense]);
@@ -299,6 +347,7 @@ export const ExpenseProvider: React.FC<ExpenseProviderProps> = ({ children }) =>
       totalExpenses,
       selectedCountry,
       countries: defaultCountries,
+      isConverting,
       addExpense,
       deleteExpense,
       updateExpense,

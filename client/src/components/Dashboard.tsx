@@ -1,12 +1,12 @@
 import React, { useState, useContext } from 'react';
-import { Plus, TrendingUp, TrendingDown, DollarSign, Calendar, BarChart3 } from 'lucide-react';
+import { Plus, TrendingUp, TrendingDown, DollarSign, Calendar, BarChart3, RefreshCw } from 'lucide-react';
 import { ExpenseContext } from '../context/ExpenseContext';
 import AddExpenseModal from './AddExpenseModal';
 import ExpenseChart from './ExpenseChart';
 import CountrySelector from './CountrySelector';
 
 const Dashboard: React.FC = () => {
-  const { expenses, totalExpenses, categories, cards, selectedCountry } = useContext(ExpenseContext);
+  const { expenses, totalExpenses, categories, cards, selectedCountry, isConverting } = useContext(ExpenseContext);
   const [showAddModal, setShowAddModal] = useState(false);
 
   const currentMonth = new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
@@ -42,16 +42,34 @@ const Dashboard: React.FC = () => {
         
         {/* Country Selector */}
         <div className="flex flex-col items-end space-y-2">
-          <span className="text-cyan-400/70 text-sm font-medium">Country</span>
+          <span className="text-cyan-400/70 text-sm font-medium">Currency</span>
           <CountrySelector />
         </div>
       </div>
+
+      {/* Currency Conversion Notice */}
+      {isConverting && (
+        <div className="aeos-card p-4 border-cyan-400/50 bg-cyan-400/10">
+          <div className="flex items-center space-x-3">
+            <RefreshCw className="text-cyan-400 animate-spin" size={20} />
+            <div>
+              <h3 className="text-cyan-400 font-semibold">Converting Currencies</h3>
+              <p className="text-cyan-400/70 text-sm">
+                Updating all amounts to {selectedCountry.currency.name} using live exchange rates...
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Navigation Tabs */}
       <div className="flex space-x-4">
         <button 
           onClick={() => setShowAddModal(true)}
-          className="px-6 py-3 aeos-button-primary rounded-lg font-medium flex items-center space-x-2"
+          disabled={isConverting}
+          className={`px-6 py-3 aeos-button-primary rounded-lg font-medium flex items-center space-x-2 ${
+            isConverting ? 'opacity-50 cursor-not-allowed' : ''
+          }`}
         >
           <Plus size={18} />
           <span>Add Expense</span>
@@ -66,7 +84,14 @@ const Dashboard: React.FC = () => {
               <p className="text-cyan-300/70 text-sm mb-1 font-mono">Total Expenses</p>
               <p className="text-2xl font-bold text-cyan-400" style={{
                 textShadow: '0 0 15px rgba(0, 255, 255, 0.6)'
-              }}>{formatCurrency(totalExpenses)}</p>
+              }}>
+                {isConverting ? (
+                  <RefreshCw className="inline animate-spin" size={24} />
+                ) : (
+                  formatCurrency(totalExpenses)
+                )}
+              </p>
+              <p className="text-xs text-cyan-400/50 mt-1">{selectedCountry.currency.code}</p>
             </div>
             <DollarSign className="text-cyan-400 opacity-80" size={24} />
           </div>
@@ -78,7 +103,14 @@ const Dashboard: React.FC = () => {
               <p className="text-cyan-300/70 text-sm mb-1 font-mono">This Month</p>
               <p className="text-2xl font-bold text-cyan-400" style={{
                 textShadow: '0 0 15px rgba(0, 255, 255, 0.6)'
-              }}>{formatCurrency(monthlyTotal)}</p>
+              }}>
+                {isConverting ? (
+                  <RefreshCw className="inline animate-spin" size={24} />
+                ) : (
+                  formatCurrency(monthlyTotal)
+                )}
+              </p>
+              <p className="text-xs text-cyan-400/50 mt-1">{selectedCountry.currency.code}</p>
             </div>
             <Calendar className="text-cyan-400 opacity-80" size={24} />
           </div>
@@ -90,7 +122,14 @@ const Dashboard: React.FC = () => {
               <p className="text-cyan-300/70 text-sm mb-1 font-mono">Card Balance</p>
               <p className="text-2xl font-bold text-cyan-400" style={{
                 textShadow: '0 0 15px rgba(0, 255, 255, 0.6)'
-              }}>{formatCurrency(totalCardBalance)}</p>
+              }}>
+                {isConverting ? (
+                  <RefreshCw className="inline animate-spin" size={24} />
+                ) : (
+                  formatCurrency(totalCardBalance)
+                )}
+              </p>
+              <p className="text-xs text-cyan-400/50 mt-1">{selectedCountry.currency.code}</p>
             </div>
             <TrendingUp className="text-cyan-400 opacity-80" size={24} />
           </div>
@@ -103,6 +142,7 @@ const Dashboard: React.FC = () => {
               <p className="text-2xl font-bold text-cyan-400" style={{
                 textShadow: '0 0 15px rgba(0, 255, 255, 0.6)'
               }}>{expenses.length}</p>
+              <p className="text-xs text-cyan-400/50 mt-1">Total count</p>
             </div>
             <TrendingDown className="text-cyan-400 opacity-80" size={24} />
           </div>
@@ -129,9 +169,18 @@ const Dashboard: React.FC = () => {
                   <p className="font-medium text-cyan-300">{expense.description}</p>
                   <p className="text-sm text-cyan-400/70 font-mono">{expense.category} • {expense.date}</p>
                 </div>
-                <span className="font-bold text-lg text-cyan-400" style={{
-                  textShadow: '0 0 10px rgba(0, 255, 255, 0.5)'
-                }}>{formatCurrency(expense.amount)}</span>
+                <div className="text-right">
+                  <span className="font-bold text-lg text-cyan-400" style={{
+                    textShadow: '0 0 10px rgba(0, 255, 255, 0.5)'
+                  }}>
+                    {isConverting ? (
+                      <RefreshCw className="inline animate-spin" size={16} />
+                    ) : (
+                      formatCurrency(expense.amount)
+                    )}
+                  </span>
+                  <p className="text-xs text-cyan-400/50">{selectedCountry.currency.code}</p>
+                </div>
               </div>
             ))}
             {expenses.length === 0 && (
@@ -147,7 +196,10 @@ const Dashboard: React.FC = () => {
                 <p className="text-cyan-300/70 mb-4">Add some expenses to see your analytics</p>
                 <button 
                   onClick={() => setShowAddModal(true)}
-                  className="aeos-button-primary px-6 py-2 rounded-lg"
+                  disabled={isConverting}
+                  className={`aeos-button-primary px-6 py-2 rounded-lg ${
+                    isConverting ? 'opacity-50 cursor-not-allowed' : ''
+                  }`}
                 >
                   Add First Expense
                 </button>
@@ -180,9 +232,18 @@ const Dashboard: React.FC = () => {
                     style={{ width: `${percentage}%` }}
                   ></div>
                 </div>
-                <span className="text-lg font-bold text-cyan-400" style={{
-                  textShadow: '0 0 10px rgba(0, 255, 255, 0.5)'
-                }}>{formatCurrency(categoryTotal)}</span>
+                <div className="flex items-center justify-between">
+                  <span className="text-lg font-bold text-cyan-400" style={{
+                    textShadow: '0 0 10px rgba(0, 255, 255, 0.5)'
+                  }}>
+                    {isConverting ? (
+                      <RefreshCw className="inline animate-spin" size={16} />
+                    ) : (
+                      formatCurrency(categoryTotal)
+                    )}
+                  </span>
+                  <span className="text-xs text-cyan-400/50">{selectedCountry.currency.code}</span>
+                </div>
               </div>
             );
           })}
